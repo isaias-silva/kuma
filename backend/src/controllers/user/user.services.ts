@@ -1,10 +1,11 @@
 
-import { HttpException, HttpStatus, Injectable, Response } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 
 import { Model } from 'mongoose';
 import { User } from './user.model';
 
+import { hash } from 'bcrypt'
 
 @Injectable()
 export class UserServices {
@@ -15,10 +16,28 @@ export class UserServices {
 
   async create(doc: User) {
     try {
-      const result = await new this.userModel(doc).save();
-      return result
+      const existingUser = await this.checkUserWithEmailOrName(doc.email, doc.name);
+
+      if (existingUser) {
+        const error = new Error('Email or userName exists');
+        error.name = 'ConflictError';
+        throw error;
+      }
+
+      //
+      const formattedUser = { ...doc };
+      const salt = 10;
+      formattedUser.password = await hash(formattedUser.password, salt);
+
+      const result = await new this.userModel(formattedUser).save();
+      return result._id;
     } catch (err) {
-      return new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      //
+      if (err.name === 'ConflictError') {
+        throw new HttpException(err.message, HttpStatus.CONFLICT);
+      } else {
+        throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
     }
 
   }
@@ -41,17 +60,36 @@ export class UserServices {
       return result
 
     } catch (err) {
-      return new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
   async delete(id: string) {
     try {
-
       const result = await this.userModel.deleteOne({ _id: id })
       return result
     } catch (err) {
-      return new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      throw new HttpException(err.message, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+  }
+
+  async getUserByEmail(email: string) {
+  
+    const exist = await this.userModel.findOne({ email })
+    if (!exist) {
+      return
+    }
+
+    return exist
+  }
+  async checkUserWithEmailOrName(email: string, name: string) {
+    const exist = await this.userModel.findOne({
+      $or: [
+        { email },
+        { name }]
+    })
+    console.log(exist)
+    return exist ? true : false
+
   }
 }
