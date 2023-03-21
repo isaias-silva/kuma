@@ -1,5 +1,5 @@
 
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
 import { UserServices } from './user.services';
 import { User } from './user.model';
 import { ResponseOfRequest } from 'src/utils/ResponseOfRequest';
@@ -11,10 +11,9 @@ export class UserController {
     constructor(private service: UserServices) {
     }
 
-    @Get('findById/:id')
-    async get(@Param() params, @Res() res) {
-        const response = await this.service.findById(params.id);
-        return new ResponseOfRequest("sucess", HttpStatus.OK).sendResponse(res, response)
+    @Get('me')
+    async get(@Param() params, @Req() req, @Res() res) {
+        return new ResponseOfRequest('info of user', 200).sendResponse(res, req['user'])
     }
 
     @Post('create')
@@ -26,8 +25,8 @@ export class UserController {
         validatedUser.password = user.password
         validatedUser.adm = false;
 
-     
-        const erros =  validateSync(validatedUser)
+
+        const erros = validateSync(validatedUser)
         if (erros.length > 0) {
             return new ResponseOfRequest('error in create user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
         }

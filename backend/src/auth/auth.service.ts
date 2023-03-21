@@ -1,4 +1,5 @@
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import * as jwt from 'jsonwebtoken';
 import { compare } from 'bcrypt';
 import { UserServices } from 'src/controllers/user/user.services';
 
@@ -15,7 +16,9 @@ export class AuthService {
                 throw new HttpException('user not found', HttpStatus.NOT_FOUND)
             }
             if (await compare(password, user.password)) {
-                return "nice"
+              const {name,email,adm}=user
+               const token= jwt.sign({name,email,adm},process.env.SECRET)
+               return token
             } else {
                 throw new HttpException('incorrect password', HttpStatus.UNAUTHORIZED)
             }

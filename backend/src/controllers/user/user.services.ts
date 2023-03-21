@@ -1,10 +1,9 @@
 
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-
+import * as jwt from 'jsonwebtoken'
 import { Model } from 'mongoose';
 import { User } from './user.model';
-
 import { hash } from 'bcrypt'
 
 @Injectable()
@@ -30,7 +29,9 @@ export class UserServices {
       formattedUser.password = await hash(formattedUser.password, salt);
 
       const result = await new this.userModel(formattedUser).save();
-      return result._id;
+      const { name, email, adm } = result
+      const token = jwt.sign({ name, email, adm }, process.env.SECRET)
+      return {token}
     } catch (err) {
       //
       if (err.name === 'ConflictError') {
@@ -42,15 +43,6 @@ export class UserServices {
 
   }
 
-  async findById(id: string) {
-    try {
-
-      const result = await this.userModel.findById(id)
-      return result;
-    } catch (err) {
-      throw new HttpException('user not found', HttpStatus.NOT_FOUND);
-    }
-  }
 
 
 
@@ -74,7 +66,7 @@ export class UserServices {
   }
 
   async getUserByEmail(email: string) {
-  
+
     const exist = await this.userModel.findOne({ email })
     if (!exist) {
       return
@@ -88,7 +80,7 @@ export class UserServices {
         { email },
         { name }]
     })
-    console.log(exist)
+   
     return exist ? true : false
 
   }

@@ -5,7 +5,7 @@ export class ResponseOfRequest {
 
     sendResponse(response: any, data: any) {
         response.status(this.status).json({
-            mensagem: this.mensagem,
+            mensage: this.mensagem,
             data
         });
     }
