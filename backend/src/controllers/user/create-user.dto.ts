@@ -7,10 +7,6 @@ export class CreateUserDto {
     @MinLength(4,{message:"name too short, please use passwords longer than 6 characters"})
     name: string;
 
-    @IsNotEmpty()
-    @IsEmail()
-    email: string;
-
 
     @MinLength(6,{message:"password too short, please use passwords longer than 6 characters"})
     @IsNotEmpty()

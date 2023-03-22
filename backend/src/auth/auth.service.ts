@@ -7,18 +7,18 @@ import { UserServices } from 'src/controllers/user/user.services';
 export class AuthService {
     constructor(@Inject(UserServices)
     private readonly userServices: UserServices) { }
-    async validateUser(email: string, password: string) {
+    async validateUser(name: string, password: string) {
         try {
 
-            const user = await this.userServices.getUserByEmail(email)
+            const user = await this.userServices.getUserByName(name)
 
             if (!user || !user.password) {
                 throw new HttpException('user not found', HttpStatus.NOT_FOUND)
             }
             if (await compare(password, user.password)) {
-              const {name,email,adm}=user
-               const token= jwt.sign({name,email,adm},process.env.SECRET)
-               return token
+                const { name, adm, _id, apiKey } = user
+                const token = jwt.sign({ name, adm, _id }, process.env.SECRET)
+                return token
             } else {
                 throw new HttpException('incorrect password', HttpStatus.UNAUTHORIZED)
             }
@@ -26,7 +26,7 @@ export class AuthService {
 
             if (err.status) {
                 throw new HttpException(err.message, err.status)
-            }else{
+            } else {
                 throw new HttpException('internal error', HttpStatus.INTERNAL_SERVER_ERROR)
             }
 
