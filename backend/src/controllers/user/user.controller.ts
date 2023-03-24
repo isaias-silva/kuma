@@ -15,7 +15,8 @@ export class UserController {
     @Get('me')
 
     async getUser(@Param() params, @Req() req, @Res() res) {
-        return new ResponseOfRequest('info of user', 200).sendResponse(res, req['user'])
+        const result = await this.service.getUserById(req["user"]._id)
+        return new ResponseOfRequest('info of user', 200).sendResponse(res, result)
     }
     @Get('all')
     async getAllUsers(@Res() res) {
@@ -55,6 +56,16 @@ export class UserController {
         return new ResponseOfRequest('user updated', HttpStatus.OK).sendResponse(res, token)
     }
 
+    @Put('addTelegramApiKey')
+    async addTelegramApi(@Body() body: { apiKey: string }, @Req() req, @Res() res) {
+        const { apiKey } = body
+        if(!apiKey){
+            return new ResponseOfRequest('invalid token', HttpStatus.BAD_REQUEST).sendResponse(res, {})
+  
+        }
+        await this.service.setTelegramApiKey(apiKey, req["user"]._id)
+        return new ResponseOfRequest('telegram api key updated', HttpStatus.OK).sendResponse(res, {});
+    }
     @Delete('delete')
     async remove(@Body() body, @Req() req, @Res() res) {
         if (req["user"]._id == body.id) {
