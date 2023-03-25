@@ -5,8 +5,9 @@ export const UserSchema = new mongoose.Schema({
   name: { type: String, require: true },
   password: { type: String, require: true },
   apiKey: { type: String, require: false },
-  profile: { type: String, require: false },
-  adm: { type: Boolean, require: true }
+  adm: { type: Boolean, require: true },
+  days_use: { type: Number },
+  active_service: { type: Boolean },
 });
 
 export interface User {
@@ -15,6 +16,7 @@ export interface User {
   password: string,
   confirmPassword?: string
   apiKey?: string,
-  profile?: Buffer,
   adm: Boolean
+  days_use?: number
+  active_service?: boolean
 }

@@ -1,12 +1,23 @@
 
-import { Body, Controller, Delete, Get, HttpCode, HttpException, HttpStatus, Param, Post, Put, Req, Res, UseGuards } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpStatus,
+    Param,
+    Post,
+    Put,
+    Req,
+    Res,
+} from '@nestjs/common';
 import { UserServices } from './user.services';
 import { User } from './user.model';
 import { ResponseOfRequest } from 'src/utils/ResponseOfRequest';
 import { validateSync } from 'class-validator';
 import { CreateUserDto } from './create-user.dto';
 import { UpdateUserDto } from './update-user.dto';
-import { AdmMiddleware } from 'src/middlewares/check.adm';
+
 
 @Controller('user')
 export class UserController {
@@ -32,8 +43,8 @@ export class UserController {
         validatedUser.name = user.name
         validatedUser.password = user.password
         validatedUser.adm = false;
-
-
+        validatedUser.days_use = 15
+        validatedUser.active_service=true
         const erros = validateSync(validatedUser)
         if (erros.length > 0) {
             return new ResponseOfRequest('error in create user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
@@ -56,16 +67,6 @@ export class UserController {
         return new ResponseOfRequest('user updated', HttpStatus.OK).sendResponse(res, token)
     }
 
-    @Put('addTelegramApiKey')
-    async addTelegramApi(@Body() body: { apiKey: string }, @Req() req, @Res() res) {
-        const { apiKey } = body
-        if(!apiKey){
-            return new ResponseOfRequest('invalid token', HttpStatus.BAD_REQUEST).sendResponse(res, {})
-  
-        }
-        await this.service.setTelegramApiKey(apiKey, req["user"]._id)
-        return new ResponseOfRequest('telegram api key updated', HttpStatus.OK).sendResponse(res, {});
-    }
     @Delete('delete')
     async remove(@Body() body, @Req() req, @Res() res) {
         if (req["user"]._id == body.id) {
@@ -75,4 +76,16 @@ export class UserController {
 
         return new ResponseOfRequest('user deleted', HttpStatus.OK).sendResponse(res, { id: body.id })
     }
+
+    @Put('addTelegramApiKey')
+    async addTelegramApi(@Body() body: { apiKey: string }, @Req() req, @Res() res) {
+        const { apiKey } = body
+        if (!apiKey) {
+            return new ResponseOfRequest('invalid token', HttpStatus.BAD_REQUEST).sendResponse(res, {})
+
+        }
+        const key = await this.service.setTelegramApiKey(apiKey, req["user"]._id)
+        return new ResponseOfRequest('telegram api key updated', HttpStatus.OK).sendResponse(res, { key });
+    }
+
 }

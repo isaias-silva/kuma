@@ -2,6 +2,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as jwt from 'jsonwebtoken'
+import {scheduleJob} from "node-schedule";
 import { Model } from 'mongoose';
 import { User } from './user.model';
 import { hash } from 'bcrypt'
@@ -40,9 +41,11 @@ export class UserServices {
       const salt = 10;
       formattedUser.password = await hash(formattedUser.password, salt);
 
+
       const result = await new this.userModel(formattedUser).save();
       const { apiKey, adm, name, _id } = result
       const token = jwt.sign({ apiKey, adm, name, _id }, process.env.SECRET)
+      this.getJob(result, result.id)
       return token
     } catch (err) {
 
@@ -86,9 +89,9 @@ export class UserServices {
     if (!exist) {
       return
     }
-    const { name, _id, adm, apiKey } = exist
-
-    return { name, _id, adm, apiKey }
+    const { name, _id, adm, apiKey, days_use } = exist
+    console.log(exist.id)
+    return { name, _id, adm, apiKey, days_use }
   }
   async getUserByName(name: string) {
 
@@ -110,13 +113,13 @@ export class UserServices {
   }
   async setTelegramApiKey(apiKey: string, userId: string) {
     try {
- 
-      const test=  await axios.get(`https://api.telegram.org/bot${apiKey}/getMe`)
-      
 
-     console.log(test)
-      if(test.status!=200){
-  
+      const test = await axios.get(`https://api.telegram.org/bot${apiKey}/getMe`)
+
+
+      console.log(test)
+      if (test.status != 200) {
+
         throw new HttpException('invalid api key', HttpStatus.BAD_REQUEST)
       }
       const exist = await this.userModel.findById(userId)
@@ -125,10 +128,24 @@ export class UserServices {
       }
       await this.userModel.updateOne({ _id: userId }, { apiKey })
 
-      return
+      return apiKey
     } catch (err) {
       throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
+  }
+  async getJob(user: User, _id: string) {
+    if (user.adm || !user.active_service) {
+      return
+    }
+    const deadline = new Date();
+    deadline.setDate(deadline.getDate() + user.days_use);
+    const userModel = this.userModel
+
+    const job = scheduleJob(deadline, async function () {
+      console.log('jod days:' + user.days_use)
+      await userModel.updateOne({ _id }, { active_service: false })
+      console.log('expired')
+    });
   }
 }
