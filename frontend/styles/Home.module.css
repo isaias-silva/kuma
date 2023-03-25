@@ -1,0 +1,84 @@
+.login {
+    background-color:var(--modal_color);
+    width: 40%;
+    min-height: 300px;
+    margin: auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    box-sizing: border-box;
+    margin-top: 50px;
+    box-shadow: 10px 10px #000;
+}
+
+.login div {
+    width: 80%;
+    margin-top: 10px;
+    margin:auto;
+    text-align: center;
+
+
+}
+
+.login label {
+    margin-top: 10px;
+    display: block;
+    font-weight: bold;
+    color: var(--main_color)
+}
+
+.login input {
+    margin: auto;
+    height: 30px;
+    width: 80%;
+    border: none;
+    border-radius: 10px;
+    background-color: var(--input_color);
+}
+.input_view{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--input_color);
+    border-radius: 10px;
+}
+.input_view input{
+    width: 100%;
+    
+}
+
+.login button {
+    width: 40%;
+    height: 40px;
+    margin-top: 20px;
+    border-radius: 10px;
+    background-color: var(--main_color);
+    color: #fff;
+    font-weight: bold;
+
+}
+
+.login span {
+    display: block;
+    margin-top: 10px;
+    color: #ff0000;
+    background-color: #ec9696;
+    width: 40%;
+    margin: auto;
+    margin-top: 5px;
+    padding: 2px;
+    border-radius: 10px;
+  
+}
+.login a{
+    margin: 20px
+}
+.btn_activate{
+    color:var(--main_color)
+}
+.btn_activate:hover{
+    cursor: pointer;
+}

@@ -30,6 +30,7 @@ export class UserController {
         return new ResponseOfRequest('info of user', 200).sendResponse(res, result)
     }
     @Get('all')
+
     async getAllUsers(@Res() res) {
         const result = await this.service.allusers()
         return new ResponseOfRequest('info of user', 200).sendResponse(res, result)
@@ -53,7 +54,6 @@ export class UserController {
         return new ResponseOfRequest('user created', HttpStatus.OK).sendResponse(res, result)
     }
 
-
     @Put('update')
     async update(@Body() user: User, @Req() req, @Res() res) {
         const validatedUser = new UpdateUserDto()
@@ -67,16 +67,12 @@ export class UserController {
         return new ResponseOfRequest('user updated', HttpStatus.OK).sendResponse(res, token)
     }
 
-    @Delete('delete')
-    async remove(@Body() body, @Req() req, @Res() res) {
-        if (req["user"]._id == body.id) {
-            return new ResponseOfRequest('is imposible to delete your self', 400).sendResponse(res, null)
-        }
-        await this.service.delete(body.id);
-
-        return new ResponseOfRequest('user deleted', HttpStatus.OK).sendResponse(res, { id: body.id })
+    @Put('renovatePlan')
+    async updatePlan(@Body() body, @Req() req, @Res() res) {
+      
+        await this.service.renovateUser(body.id)
+        return new ResponseOfRequest('plan update', HttpStatus.OK).sendResponse(res, {})
     }
-
     @Put('addTelegramApiKey')
     async addTelegramApi(@Body() body: { apiKey: string }, @Req() req, @Res() res) {
         const { apiKey } = body
@@ -88,4 +84,16 @@ export class UserController {
         return new ResponseOfRequest('telegram api key updated', HttpStatus.OK).sendResponse(res, { key });
     }
 
+
+    @Delete('delete')
+    async remove(@Body() body, @Req() req, @Res() res) {
+        if (req["user"]._id == body.id) {
+            return new ResponseOfRequest('is imposible to delete your self', 400).sendResponse(res, null)
+        }
+        await this.service.delete(body.id);
+
+        return new ResponseOfRequest('user deleted', HttpStatus.OK).sendResponse(res, { id: body.id })
+    }
+
+  
 }

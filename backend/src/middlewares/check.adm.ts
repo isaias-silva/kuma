@@ -1,6 +1,6 @@
 import { HttpException, Injectable, NestMiddleware } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
-import * as jwt from 'jsonwebtoken';
+
 
 @Injectable()
 export class AdmMiddleware implements NestMiddleware {

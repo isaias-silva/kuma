@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, } from '@nestjs/common';
 
 import { UserModule } from './controllers/user/user.module';
 
@@ -6,9 +6,6 @@ import { MongooseConfigModule } from './mongoose.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtMiddleware } from './middlewares/check.jwt';
 import { AdmMiddleware } from './middlewares/check.adm';
-
-
-
 
 
 @Module({
@@ -21,6 +18,6 @@ export class AppModule {
     consumer
       .apply(JwtMiddleware)
       .forRoutes('user/*')
-      .apply(AdmMiddleware).forRoutes('user/create','user/delete','user/promote','user/all')
+      .apply(AdmMiddleware).forRoutes('user/create','user/delete','user/promote','user/all','user/renovatePlan')
   }
 }
