@@ -1,43 +1,65 @@
-/*login*/
-.header{
-    position: fixed;
+/*content*/
+.content {
+   
+    min-height: 100vh;
+    position: relative;
+}
+.section{
+    position: absolute;
+    right: 0;
+    width: 70%;
+    margin: auto;
+}
+
+.aside {
+    width: 20%;
     top:0;
+    position: fixed;
+    text-align: center;
+    height: 100%;
+    background-color: #00000025;
+    box-shadow: 5px 5px 10px #000;
+
+}
+
+.aside a {
+    display: flex;
+    width: 80%;
+    height: 60px;
+    color: #000;
+    background-color: #00000030;
+    margin: 5px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    font-weight: bold;
+    padding: 5px;
+    box-sizing: border-box;
+    transition: 0.4s linear;
+
+}
+
+.aside a:hover {
+    background-color: #0000005d;
+
+}
+.profile {
+    width: 100px;
+    height: 100px;
+    margin: auto;
+    background-color: var(--modal_color);
+    border-radius: 100%;
+    overflow: hidden;
+    border: 4px solid var(--main_color);
+}
+.profile img{
     width: 100%;
-    min-height: 10px;
-    background-color: var(--component_color);
-display: flex;
-justify-content: space-between;
-align-items: center;
-}
-.header a{
-    display: flex;
-    text-decoration: none;
-}
-.header h1{
-    font-size: 24px;
-    color: var(--main_color)
-}
-.header ul{
-    display: flex;
-    list-style: none;
-}
-.header ul li{
-    margin-right: 10px;
-}
-.header ul li a{
- color:var(--main_color);
- font-weight: bold;
-}
-.header a:hover,.header a:hover h1{
-    color: #fff;
-}
-.hedar a:hover img{
- width: 10px;
+    height: auto;
 }
 
 /*login*/
 .login {
-    background-color:var(--modal_color);
+    background-color: var(--modal_color);
     width: 40%;
     min-height: 300px;
     margin: auto;
@@ -55,7 +77,7 @@ align-items: center;
 .login div {
     width: 80%;
     margin-top: 10px;
-    margin:auto;
+    margin: auto;
     text-align: center;
 
 
@@ -76,16 +98,18 @@ align-items: center;
     border-radius: 10px;
     background-color: var(--input_color);
 }
-.input_view{
+
+.input_view {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: var(--input_color);
     border-radius: 10px;
 }
-.input_view input{
+
+.input_view input {
     width: 100%;
-    
+
 }
 
 .login button {
@@ -109,14 +133,17 @@ align-items: center;
     margin-top: 5px;
     padding: 2px;
     border-radius: 10px;
-  
+
 }
-.login a{
+
+.login a {
     margin: 20px
 }
-.btn_activate{
-    color:var(--main_color)
+
+.btn_activate {
+    color: var(--main_color)
 }
-.btn_activate:hover{
+
+.btn_activate:hover {
     cursor: pointer;
 }

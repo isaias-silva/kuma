@@ -2,21 +2,31 @@
     --main_color:#64aec4;
     --modal_color: #fff;
     --input_color: #e8f0fe;
-    --component_color:#216f87;
+    --component_color:#3390ec;
 }
 *{font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif}
-body{
+html,body{
     margin:0;
     padding: 0;
+    height: 100%;
    
 }
+
 body::after{
     display: block;
     content:" ";
     width: 100%;
-    height: 100%;
-    position: absolute;
-    background-color: var(--main_color);
+    min-height: 100%;
+    position: fixed;
+    background-image: linear-gradient(to bottom, var(--main_color),var(--component_color));
     top:0;
     z-index: -1;
+}
+
+ul{
+    list-style: none;
+}
+a{
+   
+    text-decoration: none;
 }

@@ -14,13 +14,13 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Cookie from 'js-cookie'
 import login from '@/services/login';
 
-const LoginForm = () => {
+export default function LoginForm() {
     type LoginFormInputs = {
         name: string;
         password: string;
     };
 
-    const router=useRouter()
+    const router = useRouter()
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
 
@@ -85,4 +85,3 @@ const LoginForm = () => {
     );
 };
 
-export default LoginForm;

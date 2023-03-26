@@ -1,11 +1,16 @@
+import LayoutUser from "@/components/userLayout"
 
-import { Head } from 'next/document'
+
 export default function Home() {
+
   return (
-    <>
-      <div>
-        <h1>user</h1>
-      </div>
-    </>
+    
+      <>
+      <LayoutUser title="user page">
+        <>
+        <h1>hihihi</h1>
+   
+        </>
+      </LayoutUser></>
   )
 }
