@@ -1,11 +1,17 @@
 import { useForm } from 'react-hook-form';
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+
+
 import styles from '@/styles/Home.module.css'
 import Image from 'next/image';
 import perfil from '../public/login.png'
 import Link from 'next/link';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { useState } from 'react';
+
+import Cookie from 'js-cookie'
 import login from '@/services/login';
 
 const LoginForm = () => {
@@ -14,13 +20,16 @@ const LoginForm = () => {
         password: string;
     };
 
+    const router=useRouter()
+
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
 
     const onSubmit = async (data: LoginFormInputs) => {
-        const response = await login(data);
-        if (response.status == 201 ) {
-          console.log(response)
-        }else{
+        const response: { status: number, data: { message: string, data: { token: string } } } = await login(data);
+        if (response.status == 201) {
+            Cookie.set('token', response.data.data.token)
+            router.push('/user')
+        } else {
             console.log(response)
             alert('erro! ' + response.data.message)
         }

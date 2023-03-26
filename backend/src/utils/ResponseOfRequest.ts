@@ -1,11 +1,11 @@
 import { HttpStatus } from '@nestjs/common';
 
 export class ResponseOfRequest {
-    constructor(public readonly mensagem: string, public readonly status: HttpStatus) { }
+    constructor(public readonly message: string, public readonly status: HttpStatus) { }
 
     sendResponse(response: any, data: any) {
         response.status(this.status).json({
-            mensage: this.mensagem,
+            message: this.message,
             data
         });
     }

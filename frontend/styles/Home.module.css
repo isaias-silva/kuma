@@ -1,3 +1,41 @@
+/*login*/
+.header{
+    position: fixed;
+    top:0;
+    width: 100%;
+    min-height: 10px;
+    background-color: var(--component_color);
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+.header a{
+    display: flex;
+    text-decoration: none;
+}
+.header h1{
+    font-size: 24px;
+    color: var(--main_color)
+}
+.header ul{
+    display: flex;
+    list-style: none;
+}
+.header ul li{
+    margin-right: 10px;
+}
+.header ul li a{
+ color:var(--main_color);
+ font-weight: bold;
+}
+.header a:hover,.header a:hover h1{
+    color: #fff;
+}
+.hedar a:hover img{
+ width: 10px;
+}
+
+/*login*/
 .login {
     background-color:var(--modal_color);
     width: 40%;
