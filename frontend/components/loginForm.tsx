@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import login from '@/services/login';
 
 const LoginForm = () => {
     type LoginFormInputs = {
@@ -15,8 +16,14 @@ const LoginForm = () => {
 
     const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
 
-    const onSubmit = (data: LoginFormInputs) => {
-        alert('kkkkk')
+    const onSubmit = async (data: LoginFormInputs) => {
+        const response = await login(data);
+        if (response.status == 201 ) {
+          console.log(response)
+        }else{
+            console.log(response)
+            alert('erro! ' + response.data.message)
+        }
     };
     const validateName = (value: string) => {
         let error;
@@ -52,12 +59,12 @@ const LoginForm = () => {
             <div>
                 <label htmlFor="#password">Password</label>
                 <div className={styles.input_view}>
-                    <input type={visiblePassword?'text':'password'} {...register("password", { validate: validatePassword })} />
+                    <input type={visiblePassword ? 'text' : 'password'} {...register("password", { validate: validatePassword })} />
 
                     <FontAwesomeIcon className={styles.btn_activate}
-                     icon={visiblePassword?faEyeSlash:faEye}
-                    onClick={()=>{setVisiblePassword(!visiblePassword)}}
-                     />
+                        icon={visiblePassword ? faEyeSlash : faEye}
+                        onClick={() => { setVisiblePassword(!visiblePassword) }}
+                    />
                 </div>
                 {errors.password ? <span>{errors.password.message}</span> : null}
 
