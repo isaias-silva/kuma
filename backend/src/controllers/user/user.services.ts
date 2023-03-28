@@ -63,7 +63,7 @@ export class UserServices {
   }
 
   async update(id: string, updateUser: UpdateUserDto) {
-    console.log(FgBlue + `[!] updating user for name ${updateUser.name}` + Reset)
+    console.log(FgBlue + `[!] updating user for id: ${id}` + Reset)
     try {
       const exist = await this.userModel.findOne({ name: updateUser.name })
       if (exist) {
@@ -100,9 +100,17 @@ export class UserServices {
     if (!exist) {
       return
     }
-    const { name, _id, adm, apiKey, active_service, days_use } = exist
+    const { name, _id, adm, apiKey, active_service, days_use, profile } = exist
     console.log(FgBlue + `[!] get user: ${name}\n[!] adm: ${adm}` + Reset)
-    return { name, _id, adm, apiKey, active_service, days_use }
+    return {
+      name,
+      _id,
+      adm,
+      apiKey,
+      active_service,
+      days_use,
+      profile: profile ? `data:image/png;base64,${profile.toString('base64')}` : null
+    }
   }
 
   async getUserByName(name: string) {

@@ -70,7 +70,7 @@ export default function LoginForm() {
                 <div className={styles.input_view}>
                     <input type={visiblePassword ? 'text' : 'password'} {...register("password", { validate: validatePassword })} />
 
-                    <FontAwesomeIcon className={styles.btn_activate}
+                    <FontAwesomeIcon className={styles.btn_activate} width={24}
                         icon={visiblePassword ? faEyeSlash : faEye}
                         onClick={() => { setVisiblePassword(!visiblePassword) }}
                     />

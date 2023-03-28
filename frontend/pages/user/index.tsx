@@ -8,7 +8,7 @@ export default function Home() {
       <>
       <LayoutUser title="user page">
         <>
-        <h1>hihihi</h1>
+        <h1>wellcome!</h1>
    
         </>
       </LayoutUser></>

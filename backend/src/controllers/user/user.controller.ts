@@ -45,7 +45,7 @@ export class UserController {
         validatedUser.password = user.password
         validatedUser.adm = false;
         validatedUser.days_use = 15
-        validatedUser.active_service=true
+        validatedUser.active_service = true
         const erros = validateSync(validatedUser)
         if (erros.length > 0) {
             return new ResponseOfRequest('error in create user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
@@ -58,18 +58,20 @@ export class UserController {
     async update(@Body() user: User, @Req() req, @Res() res) {
         const validatedUser = new UpdateUserDto()
         validatedUser.name = user.name
+        
+      
         const erros = validateSync(validatedUser)
         if (erros.length > 0) {
             return new ResponseOfRequest('error in create user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
         }
-        const token = await this.service.update(req['user']._id, validatedUser)
+        await this.service.update(req['user']._id, validatedUser)
 
-        return new ResponseOfRequest('user updated', HttpStatus.OK).sendResponse(res, token)
+        return new ResponseOfRequest('user updated', HttpStatus.OK).sendResponse(res, {})
     }
 
     @Put('renovatePlan')
     async updatePlan(@Body() body, @Req() req, @Res() res) {
-      
+
         await this.service.renovateUser(body.id)
         return new ResponseOfRequest('plan update', HttpStatus.OK).sendResponse(res, {})
     }
@@ -95,5 +97,5 @@ export class UserController {
         return new ResponseOfRequest('user deleted', HttpStatus.OK).sendResponse(res, { id: body.id })
     }
 
-  
+
 }
