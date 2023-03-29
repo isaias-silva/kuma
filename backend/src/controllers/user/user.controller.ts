@@ -62,7 +62,7 @@ export class UserController {
       
         const erros = validateSync(validatedUser)
         if (erros.length > 0) {
-            return new ResponseOfRequest('error in create user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
+            return new ResponseOfRequest('error in updated user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
         }
         await this.service.update(req['user']._id, validatedUser)
 
@@ -74,18 +74,7 @@ export class UserController {
 
         await this.service.renovateUser(body.id)
         return new ResponseOfRequest('plan update', HttpStatus.OK).sendResponse(res, {})
-    }
-    @Put('addTelegramApiKey')
-    async addTelegramApi(@Body() body: { apiKey: string }, @Req() req, @Res() res) {
-        const { apiKey } = body
-        if (!apiKey) {
-            return new ResponseOfRequest('invalid token', HttpStatus.BAD_REQUEST).sendResponse(res, {})
-
-        }
-        const key = await this.service.setTelegramApiKey(apiKey, req["user"]._id)
-        return new ResponseOfRequest('telegram api key updated', HttpStatus.OK).sendResponse(res, { key });
-    }
-
+    }   
 
     @Delete('delete')
     async remove(@Body() body, @Req() req, @Res() res) {

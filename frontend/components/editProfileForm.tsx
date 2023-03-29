@@ -26,9 +26,15 @@ export default function EditProfileForm() {
     const [name, setName] = useState<string>()
     const [userInfo, setUserInfo] = useState<Iuser>()
     useEffect(() => {
-        getUserInfo().then(data => {
-            setUserInfo(data)
-            setName(data.name)
+        getUserInfo().then(res => {
+            if (res) {
+                const { data } = res.data
+                if(data){
+
+                    setUserInfo(data)
+                    setName(data.name)
+                }
+            }
         })
     }, [])
 
@@ -65,8 +71,11 @@ export default function EditProfileForm() {
     const validateName = (value: string) => {
         let error;
 
-        if (value && value.length < 3) {
-            error = "name is short! min: 3 digits"
+        if (value && value.length <= 3) {
+            error = "name is short! min: 4 digits"
+        }
+        if (value && value.length >= 20) {
+            error = "name is to long! max: 19 digits"
         }
         return error || true;
     };
@@ -126,13 +135,7 @@ export default function EditProfileForm() {
                 {errors.name ? <span>{errors.name.message}</span> : null}
             </div>
 
-            <div>
-                <label htmlFor="newName">set telegram api</label>
-                <input type="text"
-                  />
-
-                {errors.name ? <span>{errors.name.message}</span> : null}
-            </div>
+     
 
 
             <button type="submit">update</button>

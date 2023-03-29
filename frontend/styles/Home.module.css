@@ -14,12 +14,14 @@
     padding-left: 10px;
     color: var(--font_color)
 }
-.section h1{
+
+.section h1 {
     background-color: var(--component_color);
     margin: 0;
     margin-bottom: 10px;
-
-   box-shadow: 4px 4px 4px #000;
+    border-radius: 0 0 100px 100px;
+    box-shadow: 4px 4px 4px #000;
+    text-align: center;
 }
 
 .aside {
@@ -28,12 +30,22 @@
     position: fixed;
     text-align: center;
     height: 100%;
-    background-color: #00000025;
+    background-color: var(--component_color);
     box-shadow: 5px 5px 10px #000;
-    color: var(--font_color)
+    color: var(--font_color);
+    overflow-y: scroll;
 }
 
-.aside a {
+.aside::-webkit-scrollbar {
+    background-color: rgba(0, 0, 0, 0.244);
+    width: 5px;
+}
+
+.aside::-webkit-scrollbar-thumb {
+    background-color: var(--main_color);
+}
+
+.aside a, .aside button {
     display: flex;
     width: 80%;
     height: 60px;
@@ -47,14 +59,17 @@
     padding: 5px;
     box-sizing: border-box;
     transition: 0.4s linear;
-    color: var(--font_color)
+    color: var(--font_color);
+    border-style: none;
+    font-size: 14px;
 }
 
-.aside a svg {
+.aside a svg, .aside button svg {
     margin-right: 10px;
 }
 
-.aside a:hover {
+.aside a:hover, .aside button:hover {
+    cursor: pointer;
     background-color: #0000005d;
 
 }
@@ -143,7 +158,7 @@
 
 }
 
-.login span {
+.login span, .editForm span{
     display: block;
     margin-top: 10px;
     color: #ff0000;
@@ -155,7 +170,12 @@
     border-radius: 10px;
 
 }
-
+.editForm span{
+    display: inline;
+    width: 200px;
+    
+    margin:4px;
+}
 .login a {
     margin: 20px
 }
@@ -173,8 +193,9 @@
     width: 100%;
 
 }
-.editForm div{
-     margin-top: 20px;
+
+.editForm div {
+    margin-top: 20px;
 }
 
 .editForm label {

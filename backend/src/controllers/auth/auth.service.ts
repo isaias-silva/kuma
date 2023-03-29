@@ -16,7 +16,7 @@ export class AuthService {
                 throw new HttpException('user not found', HttpStatus.NOT_FOUND)
             }
             if (await compare(password, user.password)) {
-                const { name, adm, _id, apiKey } = user
+                const { name, adm, _id,} = user
                 const token = jwt.sign({ name, adm, _id }, process.env.SECRET)
                 return token
             } else {

@@ -6,18 +6,20 @@ import axiosService from "./axios";
 
 export default async function getUserInfo() {
     const token = Cookies.get('token')
-    if (!token) {
-        return
-    }
+
     const info = await axiosService.get('/user/me', {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': token ? `Bearer ${token}` : null
         }
     }).then((res) => {
-        const userInfo: Iuser = res.data.data
-        return userInfo
+
+        
+        return res
     }).catch((res) => {
-        return res.response
+
+        return (res.response)
+
+
     })
     return info
 }

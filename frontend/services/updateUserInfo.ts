@@ -5,19 +5,18 @@ import axiosService from "./axios";
 const token = Cookies.get('token')
 
 export async function updateName(name: string) {
-    if (!token) {
-        return
-    }
+  
     const info = await axiosService.put('/user/update', {
         name
     }, {
         headers: {
-            'Authorization': `Bearer ${token}`
+            'Authorization': token?`Bearer ${token}`:null
         }
     }).then((res) => {
        
         return res
     }).catch((res) => {
+     console.log(res)
         return res.response
     })
     return info
