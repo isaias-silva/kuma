@@ -9,7 +9,11 @@ import {
     faPeopleGroup,
     faDashboard,
     faDeleteLeft,
-    faRobot, faMoon, faSun
+    faRobot,
+    faMoon,
+    faSun,
+    faHome,
+   faDatabase
 
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -27,8 +31,8 @@ export default function Aside() {
 
     useEffect(() => {
         //is noturne
-        const theme=Cookies.get('theme-dark')
-        if(theme && typeof document!="undefined"){
+        const theme = Cookies.get('theme-dark')
+        if (theme && typeof document != "undefined") {
             setNoturne(true)
             document.body.classList.add('dark-mode')
         }
@@ -74,13 +78,19 @@ export default function Aside() {
             </div>
             <ul>
                 <li>
+                    <Link href={'/user/'}><FontAwesomeIcon icon={faHome} width={20} />   home</Link>
+                </li>
+                <li>
                     <Link href={'/user/profile'}><FontAwesomeIcon icon={faEdit} width={20} />   edit profile</Link>
                 </li>
                 <li>
                     <Link href={'/user'}> <FontAwesomeIcon icon={faRobot} width={20} />my bots</Link>
                 </li>
                 <li>
-                    <Link href={'/user'}><FontAwesomeIcon icon={faMessage} width={20} />   create flux</Link>
+                    <Link href={'/user'}><FontAwesomeIcon icon={faMessage} width={20} />chat</Link>
+                </li>
+                <li>
+                    <Link href={'/user'}><FontAwesomeIcon icon={faDatabase} width={20} />   create flux</Link>
                 </li>
                 <li>
                     <Link href={'/user'}> <FontAwesomeIcon icon={faContactCard} width={20} /> contact list</Link>
