@@ -14,6 +14,8 @@ import { updateName, updateUserProfile } from '@/services/updateUserInfo';
 import path from 'path';
 import Iuser from '@/interfaces/Iuser';
 import getUserInfo from '@/services/userInfo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function EditProfileForm() {
@@ -25,11 +27,12 @@ export default function EditProfileForm() {
     const [profilePreview, setProfilePreview] = useState<string>()
     const [name, setName] = useState<string>()
     const [userInfo, setUserInfo] = useState<Iuser>()
+    const [visiblePassword, setVisiblePass] = useState<boolean>(false)
     useEffect(() => {
         getUserInfo().then(res => {
             if (res) {
                 const { data } = res.data
-                if(data){
+                if (data) {
 
                     setUserInfo(data)
                     setName(data.name)
@@ -127,7 +130,7 @@ export default function EditProfileForm() {
 
             </div>
             <div>
-                <label htmlFor="newName">set user name</label>
+           
                 <input type="text" {...register("name", { validate: validateName })}
                     onInput={changeName}
                     value={name} />
@@ -135,7 +138,6 @@ export default function EditProfileForm() {
                 {errors.name ? <span>{errors.name.message}</span> : null}
             </div>
 
-     
 
 
             <button type="submit">update</button>

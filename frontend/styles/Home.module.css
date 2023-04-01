@@ -12,7 +12,11 @@
     margin: auto;
     box-sizing: border-box;
     padding-left: 10px;
-    color: var(--font_color)
+    color: var(--font_color);
+    background-color: var(--modal_color);
+    height: 100%;
+    z-index: 1;
+
 }
 
 .section h1 {
@@ -20,7 +24,7 @@
     margin: 0;
     margin-bottom: 10px;
     border-radius: 0 0 100px 100px;
-    box-shadow: 4px 4px 4px #000;
+    box-shadow: 4px 4px #000;
     text-align: center;
 }
 
@@ -34,18 +38,11 @@
     box-shadow: 5px 5px 10px #000;
     color: var(--font_color);
     overflow-y: scroll;
+    z-index: 4;
 }
 
-.aside::-webkit-scrollbar {
-    background-color: rgba(0, 0, 0, 0.244);
-    width: 5px;
-}
 
-.aside::-webkit-scrollbar-thumb {
-    background-color: var(--main_color);
-}
-
-.aside a, .aside button {
+.aside li a, .aside li button {
     display: flex;
     width: 80%;
     height: 60px;
@@ -87,9 +84,8 @@
 .profile img {
     width: 100%;
     height: auto;
+    transition: linear 0.3s;
 }
-
-
 
 /*login*/
 .login {
@@ -123,14 +119,23 @@
     font-weight: bold;
     color: var(--main_color)
 }
-
-.login input, .editForm input {
+.editForm {
+    max-width: 700px;
     margin: auto;
-    height: 30px;
-    width: 80%;
-    border: none;
+    background-color: #00000027;
+    box-sizing: border-box;
+    padding: 20px;
     border-radius: 10px;
-    background-color: var(--input_color);
+    box-shadow: 4px 4px #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.editForm input {
+    min-width: 300px;
 }
 
 .input_view {
@@ -139,13 +144,19 @@
     align-items: center;
     background-color: var(--input_color);
     border-radius: 10px;
+    width: 200px;
 }
 
 .input_view input {
+    border:none;
+    border-radius: 0px;
     width: 100%;
-
+border-top-left-radius: 10px;
+border-bottom-left-radius: 10px;
 }
-
+.input_view svg {
+ color: var(--font_color)
+}
 .login button {
     width: 40%;
     height: 40px;
@@ -158,7 +169,7 @@
 
 }
 
-.login span, .editForm span{
+.login span, .editForm span {
     display: block;
     margin-top: 10px;
     color: #ff0000;
@@ -170,12 +181,14 @@
     border-radius: 10px;
 
 }
-.editForm span{
+
+.editForm span {
     display: inline;
     width: 200px;
-    
-    margin:4px;
+
+    margin: 4px;
 }
+
 .login a {
     margin: 20px
 }
@@ -199,6 +212,7 @@
 }
 
 .editForm label {
+    color: var(--main_color);
     margin-right: 10px;
     font-weight: bold;
 }
@@ -247,4 +261,23 @@
 .login button:hover, .editForm button:hover {
     cursor: pointer;
     background-color: var(--component_color);
+}
+
+.controlTheme {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    width: 40px;
+    height: 40px;
+
+    color: var(--font_color);
+    border: none;
+    background-color: #00000041;
+    transition: 1s linear;
+    border-radius: 10px;
+}
+.controlTheme svg{
+    width: 100%;
 }
