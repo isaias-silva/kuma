@@ -10,12 +10,12 @@ import Graph from "@/components/graph";
 import Link from "next/link";
 
 const data = [
-  { name: 'Janeiro', val: { key: 'venda', value: 2000 } },
-  { name: 'Fevereiro', val: { key: 'venda', value: 4000 } },
-  { name: 'Março', val: { key: 'venda', value: 6000 } },
-  { name: 'Abril', val: { key: 'venda', value: 8000 } },
-  { name: 'Maio', val: { key: 'venda', value: 2000 } },
-  { name: 'Junho', val: { key: 'venda', value: 1000 } },
+  { name: 'Jan', val: { key: 'sell', value: 2000 } },
+  { name: 'Fev', val: { key: 'sell', value: 4000 } },
+  { name: 'Mar', val: { key: 'sell', value: 6000 } },
+  { name: 'Abril', val: { key: 'sell', value: 8000 } },
+  { name: 'Maio', val: { key: 'sell', value: 2000 } },
+  { name: 'Jun', val: { key: 'sell', value: 1000 } },
 ];
 
 export default function Home() {
@@ -34,7 +34,7 @@ export default function Home() {
           <div className={styles.blocks}>
             <div className={styles.block}>
               <p>Track the performance of bot support on the <Link href={'/user/dashboard'}>dashboard</Link></p>
-              <Graph dataKey="venda" data={data} height={200} width={400}/>
+              <Graph dataKey="sell" data={data}/>
             </div>
 
             <div className={styles.block}>
