@@ -12,7 +12,7 @@ export default function Profile() {
         <>
         <h1>edit profile</h1>
         <TypingText text="update your info! user name and your profile."
-          typingDelay={100}
+          typingDelay={10}
           />
 
           <div>

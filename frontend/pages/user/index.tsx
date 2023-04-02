@@ -1,6 +1,12 @@
 import TypingText from "@/components/TypingText"
 import LayoutUser from "@/components/userLayout"
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faRobot, faDatabase, faContactCard, faContactBook, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
+
+
 import styles from '@/styles/Home.module.css'
+import Graph from "@/components/graph";
 
 
 
@@ -19,23 +25,30 @@ export default function Home() {
 
           <div className={styles.blocks}>
             <div className={styles.block}>
-
+              <p>Track the performance of bot support on the dashboard.</p>
+              <Graph />
             </div>
 
             <div className={styles.block}>
-              <h4>bots: </h4>
+              <h4>  bots: </h4>
+              <FontAwesomeIcon icon={faRobot} width={100} height={100} />
+              <p>create your chat bots for service and interaction.</p>
             </div>
             <div className={styles.block}>
               <h4>flow: </h4>
-            <p>
-            Flow is a pre-programmed message sequence that directs a conversation or customer service interaction. It includes prompts for information, questions, or options to guide the interaction towards a specific outcome. Flow creates a structured communication allowing for efficient and effective conversation between a service provider and customer. Following a predetermined flow ensures the provider addresses the customer's needs in an organized and timely manner, resulting in a positive customer experience.
-            </p>
+              <FontAwesomeIcon icon={faDatabase} width={100} height={100} />
+              <p>create conversation flows with different conversation paths with the user.</p>
+
             </div>
             <div className={styles.block}>
               <h4>contact list: </h4>
+              <FontAwesomeIcon icon={faContactCard} width={100} height={100} />
+              <p>create a list of your customers</p>
             </div>
             <div className={styles.block}>
               <h4>attendants list:</h4>
+              <FontAwesomeIcon icon={faPeopleGroup} width={100} height={100} />
+              <p>create a list of attendants to assist the chatbot service</p>
             </div>
 
 
