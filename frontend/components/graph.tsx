@@ -2,30 +2,50 @@
 
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-const data = [
-    { name: 'Janeiro', vendas: 2000 },
-    { name: 'Fevereiro', vendas: 3000 },
-    { name: 'Março', vendas: 5000 },
-    { name: 'Abril', vendas: 7000 },
-    { name: 'Maio', vendas: 6000 },
-    { name: 'Junho', vendas: 8000 },
-];
 
-export default function Graph() {
+
+type dataGraph =
+    {
+        name: string,
+        val: { key: string, value: number }
+    }
+export default function Graph({ dataKey, data, width, height }: {
+    dataKey: string,
+    data: dataGraph[]
+    width?: number
+    height?: number
+}) {
+    const formatData = data.map((value) => {
+        const { val, name } = value
+        const string = `{"name":"${name}","${val['key']}":${JSON.stringify(val['value'])}}`;
+
+        const obj = JSON.parse(string);
+
+        return obj
+
+    })
+ 
     return (
         <LineChart
-            width={500}
-            height={200}
-            data={data}
-            style={{ margin: 'auto' }}
+
+            width={width || 500}
+            height={height || 200}
+            data={formatData}
+            style={{
+                margin: 'auto',
+                background: '#00000032',
+                color: '#fff',
+                padding: '10px',
+                borderRadius: '20px'
+            }}
 
         >
-            <XAxis dataKey="name" />
-            <YAxis />
+            <XAxis tick={{ fill: '#31669c' }}  dataKey="name" />
+            <YAxis   tick={{ fill: '#31669c' }} />
             <CartesianGrid strokeDasharray="3 3" />
             <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="vendas" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Legend color='blue' />
+            <Line type="monotone" color='#ffffff' dataKey={dataKey} stroke="#8884d8" activeDot={{ r: 8 }} />
         </LineChart>
     );
 

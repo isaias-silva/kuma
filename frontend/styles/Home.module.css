@@ -18,6 +18,7 @@
     z-index: 1;
     background-image: url('../public/background.png');
     background-size: 100%;
+
     background-repeat: no-repeat;
 
 
@@ -317,8 +318,14 @@
     padding: 4px;
     box-shadow: 4px 4px 2px #000;
     text-align: center;
+    backdrop-filter: blur(5px);
 }
-
+.block a{
+    color: var(--main_color)
+}
+.block a:hover{
+    color: var(--modal_color)
+}
 .block:first-of-type {
     grid-row: 1;
     grid-column: 1 / span 2;
