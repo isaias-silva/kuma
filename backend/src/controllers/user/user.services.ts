@@ -7,8 +7,7 @@ import { Model } from 'mongoose';
 import { User } from './user.model';
 import { hash } from 'bcrypt'
 import { UpdateUserDto } from './update-user.dto';
-import axios from 'axios';
-import { FgBlue, FgGreen, FgRed, FgYellow, Reset } from 'src/utils/colors';
+
 @Injectable()
 export class UserServices {
   constructor(
@@ -131,29 +130,7 @@ export class UserServices {
     return exist ? true : false
 
   }
-  async setTelegramApiKey(apiKey: string, userId: string) {
-    try {
 
-      const test = await axios.get(`https://api.telegram.org/bot${apiKey}/getMe`)
-
-
-      console.log(test)
-      if (test.status != 200) {
-
-        throw new HttpException('invalid api key', HttpStatus.BAD_REQUEST)
-      }
-      const exist = await this.userModel.findById(userId)
-      if (!exist) {
-        throw new HttpException('user not found', 404)
-      }
-      await this.userModel.updateOne({ _id: userId }, { apiKey })
-
-      return apiKey
-    } catch (err) {
-      throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
-
-    }
-  }
   async renovateUser(id: string) {
     try {
       const user = await this.userModel.findById(id)

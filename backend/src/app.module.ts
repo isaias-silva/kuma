@@ -8,16 +8,19 @@ import { JwtMiddleware } from './middlewares/check.jwt';
 import { AdmMiddleware } from './middlewares/check.adm';
 import { MulterModule } from '@nestjs/platform-express';
 import { UploadModule } from './controllers/upload/upload.module';
+import { BotModule } from './controllers/bot/bot.module';
 
 
 @Module({
   imports: [MongooseConfigModule,
-     UserModule,
-      AuthModule, 
-      UploadModule,
-      MulterModule.register({
-    dest: './uploads',
-  })],
+    UserModule,
+    AuthModule,
+    UploadModule,
+    BotModule,
+    MulterModule.register({
+      dest: './uploads',
+    }),
+  ],
   controllers: [],
   providers: [],
 })
@@ -25,7 +28,7 @@ export class AppModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(JwtMiddleware)
-      .forRoutes('user/*','upload/*')
+      .forRoutes('user/*', 'upload/*','bot/*')
       .apply(AdmMiddleware).forRoutes('user/create', 'user/delete', 'user/promote', 'user/all', 'user/renovatePlan')
   }
 }
