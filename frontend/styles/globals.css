@@ -4,6 +4,8 @@
     --input_color: #e8f0fe;
     --component_color: #31669c;
     --font_color: #051a25;
+    --link_color: #164c7b;
+    --link_color_hover: #00f5d0;
 }
 
 * {
@@ -50,8 +52,13 @@ ul {
 }
 
 a {
-
+    color: var(--link_color);
     text-decoration: none;
+    transition: 0.4s linear;
+}
+
+a:hover {
+    color: var(--link_color_hover)
 }
 
 * input {
@@ -63,13 +70,14 @@ a {
     border-radius: 10px;
 
 }
+
 * input:-webkit-autofill {
-    border:none;
-    color:var(--font_color);
+    border: none;
+    color: var(--font_color);
     border-color: initial !important;
     border-style: none !important;
     box-shadow: none !important;
     -webkit-box-shadow: 0 0 0 1000px var(--input_color) inset !important;
     -webkit-text-fill-color: var(--font_color) !important;
 
-  }
+}

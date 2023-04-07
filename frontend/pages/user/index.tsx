@@ -40,7 +40,7 @@ export default function Home() {
             <div className={styles.block}>
               <h4>  bots: </h4>
               <FontAwesomeIcon icon={faRobot} width={100} height={100} />
-              <p>create your chat <Link href={'/user/bots'}>bots</Link> for service and interaction.</p>
+              <p>create your chat <Link href={'/user/mybots'}>bots</Link> for service and interaction.</p>
             </div>
             <div className={styles.block}>
               <h4>flow: </h4>

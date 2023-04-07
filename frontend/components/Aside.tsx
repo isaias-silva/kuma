@@ -84,7 +84,7 @@ export default function Aside() {
                     <Link href={'/user/profile'}><FontAwesomeIcon icon={faEdit} width={20} />   edit profile</Link>
                 </li>
                 <li>
-                    <Link href={'/user'}> <FontAwesomeIcon icon={faRobot} width={20} />my bots</Link>
+                    <Link href={'/user/mybots'}> <FontAwesomeIcon icon={faRobot} width={20} />my bots</Link>
                 </li>
                 <li>
                     <Link href={'/user'}><FontAwesomeIcon icon={faMessage} width={20} />chat</Link>

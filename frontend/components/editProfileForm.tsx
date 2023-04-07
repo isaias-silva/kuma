@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 import styles from '@/styles/Home.module.css'
 import Image from 'next/image';
 import load from '../public/load.gif'
-import Link from 'next/link';
+import corrupetd from '../public/corrupted.png'
 
 
 
@@ -92,7 +92,8 @@ export default function EditProfileForm() {
         }
 
         if (!file.type.includes("image")) {
-            error = `${file.type} is not valid`
+            error = `${file.type} is not valid file type`
+
         }
 
 
@@ -100,9 +101,17 @@ export default function EditProfileForm() {
     };
 
     const changeImage = (ev: any) => {
+        const file = ev.target.files[0]
 
+        if (!file) {
+            return
+        }
+        if (!file.type.includes("image")) {
+            setProfilePreview(corrupetd.src)
+        } else {
 
-        setProfilePreview(URL.createObjectURL(ev.target.files[0]))
+            setProfilePreview(URL.createObjectURL(ev.target.files[0]))
+        }
 
 
     }
@@ -112,6 +121,7 @@ export default function EditProfileForm() {
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.editForm}>
             <div>
+
                 <div className={styles.profileEdit}>
                     <label htmlFor="profile">
                         <Image src={profilePreview || userInfo?.profile || load} width={150} height={150} alt="select your profile"></Image>
@@ -122,15 +132,16 @@ export default function EditProfileForm() {
 
                         {...register("profile", { validate: validateProfile })}
                         onInput={changeImage}
+
                     />
 
-                </div>
 
+                </div>
                 {errors.profile ? <span>{errors.profile.message}</span> : null}
 
             </div>
             <div>
-           
+
                 <input type="text" {...register("name", { validate: validateName })}
                     onInput={changeName}
                     value={name} />

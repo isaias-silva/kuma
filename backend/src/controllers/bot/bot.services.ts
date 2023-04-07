@@ -64,12 +64,13 @@ export class BotServices {
     async deleteBot(ownerId: string, botId: string) {
 
         try {
-            const exist = await this.botModel.findById(botId)
+            const [exist] = await this.botModel.find({ ownerId, _id: botId })
             if (!exist) {
+
                 throw new HttpException('bot not found', 404)
             }
-
-            await this.botModel.deleteOne({ _id: botId })
+            console.log(exist)
+            await this.botModel.deleteOne({ _id: botId, ownerId })
 
 
         } catch (err) {
