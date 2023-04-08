@@ -19,7 +19,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 
 export default function EditProfileForm() {
-    type LoginFormInputs = {
+    type UpdateProfileInputs = {
         name: string;
         profile: FileList;
     };
@@ -27,7 +27,7 @@ export default function EditProfileForm() {
     const [profilePreview, setProfilePreview] = useState<string>()
     const [name, setName] = useState<string>()
     const [userInfo, setUserInfo] = useState<Iuser>()
-    const [visiblePassword, setVisiblePass] = useState<boolean>(false)
+ 
     useEffect(() => {
         getUserInfo().then(res => {
             if (res) {
@@ -43,9 +43,9 @@ export default function EditProfileForm() {
 
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+    const { register, handleSubmit, formState: { errors } } = useForm<UpdateProfileInputs>();
 
-    const onSubmit = async (data: LoginFormInputs) => {
+    const onSubmit = async (data: UpdateProfileInputs) => {
         console.log(data)
         if (data.name) {
             const res = await updateName(data.name)

@@ -1,3 +1,13 @@
+span.loadText{
+    display: block;
+    width: 50%;
+    background-color: #00000064;
+    height: 24px;
+    margin: auto;
+    border-radius: 20px;
+animation: loadText 1s infinite;
+
+}
 /*content*/
 .content {
 
@@ -16,7 +26,7 @@
     background-color: var(--modal_color);
     min-height: 100%;
     z-index: 1;
-    background-image: url('../public/background.png');
+
     background-size: 100%;
 
     background-repeat: no-repeat;
@@ -28,9 +38,13 @@
     background-color: var(--component_color);
     margin: 0;
     margin-bottom: 20px;
-    border-radius: 0 0 100px 100px;
-    box-shadow: 4px 4px 4px #000;
-    text-align: center;
+    border-radius: 0 0 0 100px;
+    box-shadow: 4px 4px 2px #000;
+    box-sizing: border-box;
+    padding-left: 40px;
+    text-align: left;
+    font-size: 24px;
+    width: 100%;
 
 }
 
@@ -48,7 +62,7 @@
     text-align: center;
     height: 100%;
     background-color: var(--component_color);
-    box-shadow: 5px 5px 10px #000;
+    box-shadow: 5px 5px 4px #000;
     color: var(--font_color);
     overflow-y: scroll;
     z-index: 4;
@@ -131,10 +145,11 @@
     margin-top: 10px;
     display: block;
     font-weight: bold;
-    color: var(--main_color)
+    color: var(--main_color);
+
 }
 
-.editForm {
+.editForm, .botForm {
     max-width: 700px;
     margin: auto;
     background-color: #00000070;
@@ -146,12 +161,38 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    transition: 0.4s linear;
+    margin-bottom: 10px;
 }
-
-
-.editForm input {
+.botForm .blocks{
+    display: flex;
+}
+.botForm .blocks .block{
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #00000000;
+    box-shadow: none;
+    width: 50%;
+    backdrop-filter:initial;
+    border-radius: 0%;
+ 
+}
+.botForm .blocks .block:nth-of-type(1){
+    padding-right: 10px;
+    border-right: 2px solid var(--component_color);
+}
+.imageBotProfile{
+    border: 5px solid var(--component_color);
+    border-radius: 100%;
+}
+.editForm input,.botForm input {
     min-width: 300px;
 }
+
+
 
 .input_view {
     display: flex;
@@ -187,7 +228,7 @@
 
 }
 
-.login span, .editForm span {
+.login span, .editForm span,.botForm span {
     display: block;
     margin: auto; 
     margin-top: 10px;
@@ -221,12 +262,12 @@ margin-top: 10px;
 }
 
 /*profile edit*/
-.editForm {
+.editForm,.botForm {
     width: 100%;
 
 }
 
-.editForm div {
+.editForm div, .botForm div {
     margin-top: 20px;
 }
 
@@ -244,7 +285,7 @@ margin-top: 10px;
     display: none;
 }
 
-.editForm button {
+.editForm button, .botForm button {
     font-weight: bold;
     width: 150px;
     height: 50px;
@@ -279,7 +320,7 @@ margin-top: 10px;
     filter: grayscale(100%)
 }
 
-.login button:hover, .editForm button:hover {
+.login button:hover, .editForm button:hover, .botForm button:hover {
     cursor: pointer;
     background-color: var(--component_color);
 }
@@ -311,6 +352,7 @@ margin-top: 10px;
     height: 100%;
     grid-template-columns: repeat(3, 1fr);
     grid-gap: 10px;
+    text-align: center;
 }
 
 .block,.block_normal {
@@ -326,9 +368,35 @@ margin-top: 10px;
     backdrop-filter: blur(5px);
 }
 
+.block_normal{
+    overflow:hidden;
+   
+}
+.block_normal img{
+    width: 50%;
+    border-radius: 100%;
+    border: 5px solid var(--component_color);
+    transition: 0.5s linear;
 
+}
+a.block_normal:hover img{
+    border-color: var(--link_color_hover);
+    transform: scale(1.05);
+}
 
 .block:first-of-type {
     grid-row: 1;
     grid-column: 1 / span 2;
+}
+
+@keyframes loadText {
+    0%{
+        filter:opacity(1)
+    }
+    50%{
+        filter:opacity(0)
+    }
+    100%{
+        filter:opacity(1)
+    }
 }

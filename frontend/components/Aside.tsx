@@ -64,16 +64,16 @@ export default function Aside() {
     }
     return <>
         <div className={styles.aside}>
-            <button className={styles.controlTheme}><FontAwesomeIcon icon={isNoturne ? faSun : faMoon}
+            <button  onClick={setTheme} className={styles.controlTheme}><FontAwesomeIcon icon={isNoturne ? faSun : faMoon}
                 width={25}
                 height={25}
-                onClick={setTheme}
+               
             /></button>
             <div className={styles.userinfo}>
                 <div className={styles.profile}>
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
-                <h3>{userInfo?.name}</h3>
+                <h3>{userInfo?.name||<span className={styles.loadText}></span>} </h3>
                 <span>days of use: {userInfo?.days_use}</span>
             </div>
             <ul>
