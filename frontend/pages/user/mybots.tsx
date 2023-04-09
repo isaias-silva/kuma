@@ -6,9 +6,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import getMyBots from "@/services/botInfo";
 
-
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDeleteLeft } from "@fortawesome/free-solid-svg-icons";
+import profile from '../../public/login.png'
 import CreateBotForm from "@/components/createBotForm";
 
 
@@ -31,7 +29,7 @@ export default function Mybots() {
     const botsComponent = bots.map((bot) => {
 
         return <Link href={`/bot/${bot.bot_id}`} className={styles.block_normal}>
-            <Image src={bot.profile} width={150} height={150} alt="profile" />
+            <Image src={bot.profile||profile.src} width={150} height={150} alt="profile" />
             <h3>{bot.name}</h3>
 
             <p>{bot.telegram_name}</p>
@@ -43,15 +41,15 @@ export default function Mybots() {
     return <LayoutUser title="edit your profile">
         <>
             <h1>my bots</h1>
-            <TypingText text={bots.length > 0 ? `your valid bots: ${bots.length}` : `no valid bot created, create your bots with telegram api key`}
-                link={bots.length > 0 ? null: "https://web.telegram.org/k/#@BotFather"}
+            <TypingText text={bots.length > 0 ? `your valid bots: ${bots.length} \n create a apiKey bot with bot father in telegram. ` : `no valid bot created, create your bots with telegram api key`}
+                link={"https://web.telegram.org/k/#@BotFather"}
                 typingDelay={10}
             />
-            <CreateBotForm />
-           
             <div className={styles.blocks}>
                 {botsComponent}
             </div>
+            <CreateBotForm />
+           
         </>
     </LayoutUser>
 }

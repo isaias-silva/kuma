@@ -1,11 +1,11 @@
 :root {
-    --main_color: #64aec4;
-    --modal_color: #fff;
-    --input_color: #e8f0fe;
-    --component_color: #31669c;
+    --main_color: #51a8d8;
+    --modal_color: #f0f0f0;
+    --input_color: #c9e2f9;
+    --component_color: #2a5c84;
     --font_color: #051a25;
-    --link_color: #164c7b;
-    --link_color_hover: #00f5d0;
+    --link_color: #ffffff;
+    --link_color_hover: #004ca8;
 }
 
 * {

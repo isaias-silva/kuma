@@ -24,8 +24,8 @@ span.loadText {
     box-sizing: border-box;
     padding-left: 10px;
     color: var(--font_color);
-    background-color: var(--modal_color);
-    min-height: 100%;
+    
+   min-height: 100%;
     z-index: 1;
 
     background-size: 100%;
@@ -153,7 +153,7 @@ span.loadText {
 .editForm, .botForm {
     max-width: 700px;
     margin: auto;
-    background-color: #00000070;
+    background-color: var(--modal_color);
     box-sizing: border-box;
     padding: 20px;
     border-radius: 10px;
@@ -164,6 +164,7 @@ span.loadText {
     align-items: center;
     transition: 0.4s linear;
     margin-bottom: 10px;
+    margin-top: 10px
 }
 
 .botForm .blocks {
@@ -176,7 +177,7 @@ span.loadText {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #00000000;
+    background-color: var(--modal_color);
     box-shadow: none;
     width: 50%;
     backdrop-filter: initial;
@@ -360,16 +361,16 @@ span.loadText {
     grid-gap: 10px;
     text-align: center;
 
-  
+
 
 }
 
 .block, .block_normal {
 
     min-height: 300px;
-    margin:auto;
+    margin: auto;
     margin: 4px;
-    background-color: #0101016d;
+   background-color: var(--modal_color);
     border-radius: 20px;
     box-sizing: border-box;
     padding: 4px;
