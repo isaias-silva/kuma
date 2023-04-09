@@ -21,6 +21,7 @@ export class BotController {
     }
     @Post('/create')
     async create(@Req() req, @Res() res, @Body() bot: TelBot) {
+
         const validatedBot = new CreateBotDto()
         validatedBot.name = bot.name,
             validatedBot.apiKey = bot.apiKey
@@ -29,7 +30,7 @@ export class BotController {
             return new ResponseOfRequest('error in create bot', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
         }
 
-         await this.service.createBot(req["user"]._id, bot)
+        await this.service.createBot(req["user"]._id, bot)
 
         return new ResponseOfRequest('bot created', 200).sendResponse(res, {})
     }

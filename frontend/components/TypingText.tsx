@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import ReactDOMServer from 'react-dom/server';
 
-export default function TypingText({ text, typingDelay, link }: { text: string, typingDelay: number, link?: string|null }) {
+export default function TypingText({ text, typingDelay, link }: { text: string, typingDelay: number, link?: string | null }) {
 
     const [displayText, setDisplayText] = useState('');
 
@@ -23,5 +23,5 @@ export default function TypingText({ text, typingDelay, link }: { text: string, 
     }, [displayText, text, typingDelay]);
 
 
-    return link==null?  <p> {displayText}</p>:<p> <Link href={link}>click here </Link></p>
+    return link == null ? <p> {displayText}</p> : <p>{displayText} <Link href={link}>click here </Link></p>
 };
