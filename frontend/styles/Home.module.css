@@ -9,6 +9,35 @@ span.loadText {
 
 }
 
+.invisible {
+    display: none;
+}
+
+.widowclos {
+
+    position: relative;
+    width: 100%;
+}
+
+.closbtn {
+    width: 50px;
+    height: 50px;
+    font-size: 24px;
+    border-radius: 30%;
+    position: absolute;
+    left: 125px;
+    top: 0;
+    z-index: 10 !important;
+    border: 1px solid var(--font_color);
+    background-color: var(--main_color);
+    color: var(--font_color)
+}
+
+.closbtn:hover {
+    cursor: pointer;
+    background-color: var(--component_color);
+}
+
 /*content*/
 .content {
 
@@ -24,8 +53,8 @@ span.loadText {
     box-sizing: border-box;
     padding-left: 10px;
     color: var(--font_color);
-    
-   min-height: 100%;
+
+    min-height: 100%;
     z-index: 1;
 
     background-size: 100%;
@@ -164,8 +193,11 @@ span.loadText {
     align-items: center;
     transition: 0.4s linear;
     margin-bottom: 10px;
-    margin-top: 10px
+    margin-top: 10px;
+    position: relative
 }
+
+.botForm {}
 
 .botForm .blocks {
     display: flex;
@@ -365,18 +397,41 @@ span.loadText {
 
 }
 
-.block, .block_normal {
+.block, .block_normal, .blockPlus {
 
     min-height: 300px;
     margin: auto;
     margin: 4px;
-   background-color: var(--modal_color);
+    background-color: var(--modal_color);
     border-radius: 20px;
     box-sizing: border-box;
     padding: 4px;
     box-shadow: 4px 4px 2px #000;
     text-align: center;
     backdrop-filter: blur(5px);
+}
+
+.blockPlus {
+    background-color: #00000038;
+    box-shadow: none;
+    border: 4px dashed var(--font_color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s ease-in-out;
+}
+
+.blockPlus:hover {
+    cursor: pointer;
+    color: var(--link_color_hover);
+    border-color: var(--link_color_hover);
+    padding: 20px;
+}
+.blockPlus svg{
+    transition: 0.2s linear;
+}
+.blockPlus:hover svg {
+    transform: rotate(180deg);
 }
 
 .block_normal {

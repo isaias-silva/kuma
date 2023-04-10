@@ -15,6 +15,7 @@ export class BotServices {
     }
     async getMybots(ownerId: string) {
         const bots = await this.botModel.find({ ownerId })
+
         return bots
     }
     async getBot(ownerId: string, botId: string) {
@@ -60,6 +61,9 @@ export class BotServices {
 
         }
     }
+    async updateBot(ownerId: string) {
+
+    }
     async generateBotInfo(bot: TelBot, ownerId: string) {
         const test = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getMe`)
             .then((res) =>
@@ -75,12 +79,41 @@ export class BotServices {
         }).catch((err) => {
             throw new HttpException("error in obtain messages", err.response.status)
         })
+        const info: { id: string, first_name: string } | null = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getMe`)
+            .then((res) => { return res.data.result }).catch((err) => {
+                return null
+            })
+        const profile = await axios.post(`https://api.telegram.org/bot${bot.apiKey}/getUserProfilePhotos`, {
+            user_id: info.id,
+        })
+            .then(response => {
+                const photos = response.data.result.photos;
 
-        const botTest = new TelegramBot(bot.apiKey, { polling: true })
-        const info = await botTest.getMe()
-        const profiles = await botTest.getUserProfilePhotos(info.id)
+                // Se o usuário tiver fotos de perfil
+                if (photos.length > 0) {
+                    // Obtenha a última foto de perfil
+                    const photo = photos[photos.length - 1];
+                    const fileId = photo[0].file_id;
 
-        const profile = profiles.photos.length > 0 ? await botTest.getFileLink(profiles.photos[0][0].file_id) : null
+                    // Solicite informações sobre o arquivo da foto
+                    return axios.post(`https://api.telegram.org/bot${bot.apiKey}/getFile`, {
+                        file_id: fileId,
+                    });
+                }
+            })
+            .then(response => {
+                if (response) {
+                    const file = response.data.result;
+                    const fileUrl = `https://api.telegram.org/file/bot${bot.apiKey}/${file.file_path}`;
+
+                    // Use a URL do arquivo para exibir a foto de perfil
+                    return (fileUrl);
+                }
+            })
+            .catch(error => {
+                console.error(error);
+                return null
+            });
 
 
         const obj: TelBot = {
@@ -90,8 +123,9 @@ export class BotServices {
             ownerId,
             messages: message_data,
             profile,
-            bot_id:info.id
+            bot_id: parseInt(info.id)
         }
+        console.log(obj)
         return obj
     }
 }

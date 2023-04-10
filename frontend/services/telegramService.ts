@@ -1,7 +1,10 @@
 import axios from "axios";
 
 export default async function infoTelegramUser(botToken: string) {
-
+if(!botToken){
+   
+    return
+}
 
     const info: { id: string, first_name: string } | null = await axios.get(`https://api.telegram.org/bot${botToken}/getMe`)
         .then((res) => { return res.data.result }).catch((err) => {
@@ -17,7 +20,7 @@ export default async function infoTelegramUser(botToken: string) {
     })
         .then(response => {
             const photos = response.data.result.photos;
-
+            console.log(response)
             // Se o usuário tiver fotos de perfil
             if (photos.length > 0) {
                 // Obtenha a última foto de perfil
@@ -42,7 +45,7 @@ export default async function infoTelegramUser(botToken: string) {
         .catch(error => {
             console.error(error);
         });
-       
+
     return {
         name: info.first_name,
         id: info.id,

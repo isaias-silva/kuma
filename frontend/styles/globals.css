@@ -4,8 +4,8 @@
     --input_color: #c9e2f9;
     --component_color: #2a5c84;
     --font_color: #051a25;
-    --link_color: #ffffff;
-    --link_color_hover: #004ca8;
+    --link_color: #393ffc;
+    --link_color_hover: #00e1ff;
 }
 
 * {
@@ -36,14 +36,26 @@ body.dark-mode {
     --font_color: #fff;
 }
 
-body::after {
+body::before{
     display: block;
     content: " ";
     width: 100%;
     min-height: 100%;
     position: fixed;
-    background-image: linear-gradient(to bottom, var(--main_color), var(--component_color));
+    background-image: linear-gradient(to bottom ,var(--main_color), var(--modal_color));
     top: 0;
+    z-index: -2;
+}
+body::after{
+    display: block;
+    content:" ";
+    width: 100%;
+    height: 100%;
+    background-image: url('../public/animate_background.gif');
+    background-size: cover;
+    filter: opacity(0.1);
+    position: fixed;
+    top:0;
     z-index: -1;
 }
 

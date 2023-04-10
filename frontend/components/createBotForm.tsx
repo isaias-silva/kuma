@@ -33,7 +33,7 @@ export default function CreateBotForm() {
             alert('bot created')
             route.reload()
         } else {
-            alert(result.status +" "+ result.data.message)
+            alert(result.status + " " + result.data.message)
             console.log(result.data.data)
         }
     };
@@ -85,6 +85,7 @@ export default function CreateBotForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.botForm}>
+          
             <h3>create bot</h3>
             <div className={styles.blocks}>
                 <div className={styles.block}>

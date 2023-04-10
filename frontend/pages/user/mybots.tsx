@@ -8,6 +8,9 @@ import getMyBots from "@/services/botInfo";
 
 import profile from '../../public/login.png'
 import CreateBotForm from "@/components/createBotForm";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+
 
 
 type TelBot = {
@@ -19,9 +22,12 @@ type TelBot = {
     messages: [],
     bot_id: number
 }
-
+function handleScroll() {
+    window.scrollTo({ top: 500, behavior: 'smooth' });
+}
 export default function Mybots() {
     const [bots, setBots] = useState<TelBot[]>([])
+    const [activeModal, setActiveModal] = useState<boolean>(false)
     useEffect(() => {
         getMyBots().then((res) => { setBots(res.data.data) }).catch((err) => { alert('ui') })
     }, [])
@@ -29,7 +35,7 @@ export default function Mybots() {
     const botsComponent = bots.map((bot) => {
 
         return <Link href={`/bot/${bot.bot_id}`} className={styles.block_normal}>
-            <Image src={bot.profile||profile.src} width={150} height={150} alt="profile" />
+            <Image src={bot.profile || profile.src} width={150} height={150} alt="profile" />
             <h3>{bot.name}</h3>
 
             <p>{bot.telegram_name}</p>
@@ -41,15 +47,27 @@ export default function Mybots() {
     return <LayoutUser title="edit your profile">
         <>
             <h1>my bots</h1>
-            <TypingText text={bots.length > 0 ? `your valid bots: ${bots.length} \n create a apiKey bot with bot father in telegram. ` : `no valid bot created, create your bots with telegram api key`}
-                link={"https://web.telegram.org/k/#@BotFather"}
+            <TypingText text={bots.length > 0 ? `your valid bots: ${bots.length}.` : `no valid bot created`}
                 typingDelay={10}
             />
+            <p>To create an API key for a bot on Telegram, you can use the Bot Father.
+                First, open a chat with the Bot Father and type "/newbot".
+                Then, follow the prompts to name your bot and create a username.
+                Once your bot is created, the <Link href={"https://t.me/botfather"} target="_blank"> bot father</Link> will provide you with an API key that you can use to access the Telegram API and program your bot.</p>
+            <div className={styles[activeModal ? "widowclos" : "invisible"]}>
+                <button className={styles.closbtn} onClick={() => { setActiveModal(false) }}>x</button>
+                <CreateBotForm />
+            </div>
             <div className={styles.blocks}>
                 {botsComponent}
+                <div className={styles.blockPlus} onClick={() => {
+                    setActiveModal(true)
+                }}>
+                    <FontAwesomeIcon icon={faPlus} width={100} height={100} />
+                </div>
             </div>
-            <CreateBotForm />
-           
+
+
         </>
     </LayoutUser>
 }
