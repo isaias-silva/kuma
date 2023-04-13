@@ -24,6 +24,10 @@ export class BotServices {
             if (!bot) {
                 throw new HttpException('bot not found', HttpStatus.NOT_FOUND)
             }
+            const updatedBot = await this.generateBotInfo(bot, ownerId)
+          
+            await this.botModel.updateOne({ _id: bot._id }, updatedBot)
+            
             return bot
         } catch (err) {
             throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
@@ -77,7 +81,7 @@ export class BotServices {
         const message_data = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getUpdates`).then(response => {
             return response.data.result;
         }).catch((err) => {
-            throw new HttpException("error in obtain messages", err.response.status)
+            return 0
         })
         const info: { id: string, first_name: string } | null = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getMe`)
             .then((res) => { return res.data.result }).catch((err) => {
@@ -89,13 +93,12 @@ export class BotServices {
             .then(response => {
                 const photos = response.data.result.photos;
 
-                // Se o usuário tiver fotos de perfil
                 if (photos.length > 0) {
-                    // Obtenha a última foto de perfil
+               
                     const photo = photos[photos.length - 1];
                     const fileId = photo[0].file_id;
 
-                    // Solicite informações sobre o arquivo da foto
+               
                     return axios.post(`https://api.telegram.org/bot${bot.apiKey}/getFile`, {
                         file_id: fileId,
                     });
@@ -106,7 +109,6 @@ export class BotServices {
                     const file = response.data.result;
                     const fileUrl = `https://api.telegram.org/file/bot${bot.apiKey}/${file.file_path}`;
 
-                    // Use a URL do arquivo para exibir a foto de perfil
                     return (fileUrl);
                 }
             })
@@ -125,7 +127,7 @@ export class BotServices {
             profile,
             bot_id: parseInt(info.id)
         }
-        console.log(obj)
+   
         return obj
     }
 }

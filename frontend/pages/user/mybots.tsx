@@ -4,27 +4,17 @@ import styles from '@/styles/Home.module.css'
 import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import getMyBots from "@/services/botInfo";
+import { getMyBots } from "@/services/botInfo";
 
 import profile from '../../public/login.png'
 import CreateBotForm from "@/components/createBotForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import TelBot from '../../interfaces/ItelBot'
 
 
 
-type TelBot = {
-    profile: string,
-    name: string,
-    telegram_name: string,
-    ownerId: string
-    apiKey: string
-    messages: [],
-    bot_id: number
-}
-function handleScroll() {
-    window.scrollTo({ top: 500, behavior: 'smooth' });
-}
+
 export default function Mybots() {
     const [bots, setBots] = useState<TelBot[]>([])
     const [activeModal, setActiveModal] = useState<boolean>(false)
@@ -34,7 +24,7 @@ export default function Mybots() {
 
     const botsComponent = bots.map((bot) => {
 
-        return <Link href={`/bot/${bot.bot_id}`} className={styles.block_normal}>
+        return <Link href={`./bot/${bot._id}`} className={styles.block_normal}>
             <Image src={bot.profile || profile.src} width={150} height={150} alt="profile" />
             <h3>{bot.name}</h3>
 

@@ -82,6 +82,9 @@ a:hover {
     border-radius: 10px;
 
 }
+* input[type="file"]{
+    display: none;
+}
 
 * input:-webkit-autofill {
     border: none;

@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faEdit,
     faContactCard,
-    faMessage,
     faPeopleGroup,
     faDashboard,
     faDeleteLeft,
@@ -13,7 +12,7 @@ import {
     faMoon,
     faSun,
     faHome,
-   faDatabase
+    faDatabase
 
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -64,16 +63,16 @@ export default function Aside() {
     }
     return <>
         <div className={styles.aside}>
-            <button  onClick={setTheme} className={styles.controlTheme}><FontAwesomeIcon icon={isNoturne ? faSun : faMoon}
+            <button onClick={setTheme} className={styles.controlTheme}><FontAwesomeIcon icon={isNoturne ? faSun : faMoon}
                 width={25}
                 height={25}
-               
+
             /></button>
             <div className={styles.userinfo}>
                 <div className={styles.profile}>
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
-                <h3>{userInfo?.name||<span className={styles.loadText}></span>} </h3>
+                <h3>{userInfo?.name || <span className={styles.loadText}></span>} </h3>
                 <span>days of use: {userInfo?.days_use}</span>
             </div>
             <ul>
@@ -85,9 +84,6 @@ export default function Aside() {
                 </li>
                 <li>
                     <Link href={'/user/mybots'}> <FontAwesomeIcon icon={faRobot} width={20} />my bots</Link>
-                </li>
-                <li>
-                    <Link href={'/user'}><FontAwesomeIcon icon={faMessage} width={20} />chat</Link>
                 </li>
                 <li>
                     <Link href={'/user'}><FontAwesomeIcon icon={faDatabase} width={20} />   create flux</Link>
