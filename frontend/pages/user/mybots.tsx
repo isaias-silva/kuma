@@ -15,6 +15,7 @@ import TelBot from '../../interfaces/ItelBot'
 
 
 
+
 export default function Mybots() {
     const [bots, setBots] = useState<TelBot[]>([])
     const [activeModal, setActiveModal] = useState<boolean>(false)
@@ -36,6 +37,7 @@ export default function Mybots() {
     })
     return <LayoutUser title="edit your profile">
         <>
+     
             <h1>my bots</h1>
             <TypingText text={bots.length > 0 ? `your valid bots: ${bots.length}.` : `no valid bot created`}
                 typingDelay={10}

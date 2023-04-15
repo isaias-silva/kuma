@@ -16,6 +16,9 @@ import Iuser from '@/interfaces/Iuser';
 import getUserInfo from '@/services/userInfo';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import Cookies from 'js-cookie';
+import withReactContent from 'sweetalert2-react-content';
+import Swal from 'sweetalert2';
 
 
 export default function EditProfileForm() {
@@ -23,11 +26,11 @@ export default function EditProfileForm() {
         name: string;
         profile: FileList;
     };
-    const route = useRouter()
+    const router = useRouter()
     const [profilePreview, setProfilePreview] = useState<string>()
     const [name, setName] = useState<string>()
     const [userInfo, setUserInfo] = useState<Iuser>()
- 
+
     useEffect(() => {
         getUserInfo().then(res => {
             if (res) {
@@ -46,30 +49,53 @@ export default function EditProfileForm() {
     const { register, handleSubmit, formState: { errors } } = useForm<UpdateProfileInputs>();
 
     const onSubmit = async (data: UpdateProfileInputs) => {
-        console.log(data)
-        if (data.name) {
-            const res = await updateName(data.name)
-            if (res.status == 200) {
-                route.reload()
-            } else {
-                alert(res.data.message)
-                console.log(res)
+        const { name, profile } = data
+        if (!name && !profile[0]) {
+            return
+        }
+        const theme = Cookies.get('theme-dark')
+        const MySwal = withReactContent(Swal)
+        MySwal.fire({
+
+            title: 'Do you want to save the changes?',
+            showDenyButton: true,
+            showCancelButton: true,
+            confirmButtonText: 'Save',
+            denyButtonText: `Don't save`,
+            iconColor: theme ? '#003b58' : '#51a8d8',
+
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                if (data.name) {
+                    const res = await updateName(data.name)
+                    if (res.status == 200) {
+                        router.reload()
+                    } else {
+                        MySwal.fire({
+                            text: res.data.message,
+                        })
+                       
+                    }
+
+                }
+                if (data.profile[0]) {
+
+                    const res = await updateUserProfile(data.profile[0])
+                    if (res.status == 200) {
+                        router.reload()
+                    } else {
+
+                        alert(res.data.message)
+                        console.log(res)
+                    }
+
+
+                }
             }
 
-        }
-        if (data.profile[0]) {
-
-            const res = await updateUserProfile(data.profile[0])
-            if (res.status == 200) {
-                route.reload()
-            } else {
-
-                alert(res.data.message)
-                console.log(res)
-            }
+        })
 
 
-        }
     };
     const validateName = (value: string) => {
         let error;

@@ -44,6 +44,9 @@ h1 .loadText {
     background-color: var(--component_color);
 }
 
+.modalAlert{
+    display: none;
+}
 /*content*/
 .content {
 
@@ -528,6 +531,8 @@ li .loadText, .botInfo li input {
     padding: 5px;
     box-shadow: 3px 3px #000;
 }
+
+
 
 @keyframes loadText {
     0% {

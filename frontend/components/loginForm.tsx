@@ -13,6 +13,8 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import Cookie from 'js-cookie'
 import login from '@/services/login';
+import Swal from 'sweetalert2';
+import withReactContent from 'sweetalert2-react-content';
 
 export default function LoginForm() {
     type LoginFormInputs = {
@@ -28,10 +30,24 @@ export default function LoginForm() {
         const response: { status: number, data: { message: string, data: { token: string } } } = await login(data);
         if (response.status == 201) {
             Cookie.set('token', response.data.data.token)
-            router.push('/user')
+            
+            const theme = Cookie.get('theme-dark')
+            const MySwal = withReactContent(Swal)
+            MySwal.fire({
+
+                title:'Login successful',
+                icon: 'success',
+                iconColor: theme ? '#003b58' : '#51a8d8',
+                text: ' Welcome!',
+                confirmButtonColor: theme ? '#003b58' : '#51a8d8'
+
+            }).then(() => {
+                router.push('/user')
+
+            })
         } else {
-            console.log(response)
-            alert('erro! ' + response.data.message)
+
+
         }
     };
     const validateName = (value: string) => {

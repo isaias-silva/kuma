@@ -36,28 +36,31 @@ body.dark-mode {
     --font_color: #fff;
 }
 
-body::before{
+body::before {
     display: block;
     content: " ";
     width: 100%;
     min-height: 100%;
     position: fixed;
-    background-image: linear-gradient(to bottom ,var(--main_color), var(--modal_color));
+    background-image: linear-gradient(to bottom, var(--main_color), var(--modal_color));
     top: 0;
     z-index: -2;
 }
-body::after{
+
+body::after {
     display: block;
-    content:" ";
+    content: " ";
     width: 100%;
     height: 100%;
     background-image: url('../public/animate_background.gif');
     background-size: cover;
     filter: opacity(0.1);
     position: fixed;
-    top:0;
+    top: 0;
     z-index: -1;
 }
+
+
 
 ul {
     list-style: none;
@@ -82,7 +85,8 @@ a:hover {
     border-radius: 10px;
 
 }
-* input[type="file"]{
+
+* input[type="file"] {
     display: none;
 }
 
