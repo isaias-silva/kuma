@@ -28,25 +28,27 @@ export default function LoginForm() {
 
     const onSubmit = async (data: LoginFormInputs) => {
         const response: { status: number, data: { message: string, data: { token: string } } } = await login(data);
+
+        const MySwal = withReactContent(Swal)
+
         if (response.status == 201) {
             Cookie.set('token', response.data.data.token)
-            
-            const theme = Cookie.get('theme-dark')
-            const MySwal = withReactContent(Swal)
-            MySwal.fire({
 
-                title:'Login successful',
+            MySwal.fire({
+                title: 'Login successful',
                 icon: 'success',
-                iconColor: theme ? '#003b58' : '#51a8d8',
                 text: ' Welcome!',
-                confirmButtonColor: theme ? '#003b58' : '#51a8d8'
 
             }).then(() => {
                 router.push('/user')
 
             })
         } else {
-
+            MySwal.fire({
+                title: response.status,
+                icon: 'error',
+                text: response.data.message
+            })
 
         }
     };

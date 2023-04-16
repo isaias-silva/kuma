@@ -3,16 +3,9 @@ import Link from 'next/link'
 import load from '../public/load.gif'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faEdit,
-    faContactCard,
-    faPeopleGroup,
-    faDashboard,
-    faDeleteLeft,
-    faRobot,
     faMoon,
     faSun,
-    faHome,
-    faDatabase
+  
 
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -21,6 +14,7 @@ import Iuser from '@/interfaces/Iuser';
 import getUserInfo from '@/services/userInfo';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import options from '@/config/options';
 
 
 export default function Aside() {
@@ -76,36 +70,16 @@ export default function Aside() {
                 <span>days of use: {userInfo?.days_use}</span>
             </div>
             <ul>
-                <li>
-                    <Link href={'/user/'}><FontAwesomeIcon icon={faHome} width={20} />   home</Link>
-                </li>
-                <li>
-                    <Link href={'/user/profile'}><FontAwesomeIcon icon={faEdit} width={20} />   edit profile</Link>
-                </li>
-                <li>
-                    <Link href={'/user/mybots'}> <FontAwesomeIcon icon={faRobot} width={20} />my bots</Link>
-                </li>
-                <li>
-                    <Link href={'/user'}><FontAwesomeIcon icon={faDatabase} width={20} />   create flux</Link>
-                </li>
-                <li>
-                    <Link href={'/user'}> <FontAwesomeIcon icon={faContactCard} width={20} /> contact list</Link>
-                </li>
-                <li>
-                    <Link href={'/user'}> <FontAwesomeIcon icon={faPeopleGroup} width={20} /> atendants list</Link>
-                </li>
-                <li>
-                    <Link href={'/user'}> <FontAwesomeIcon icon={faDashboard} width={20} />dash board</Link>
-                </li>
 
-                <li>
-                    <button onClick={() => {
-                        Cookies.remove('token')
-                        route.push('/login')
-                    }}> <FontAwesomeIcon icon={faDeleteLeft} width={30}
 
-                        />logout</button>
-                </li>
+
+                {options.map((item, i) => {
+                    return <li key={i} onClick={item.callback}>
+                        <Link href={item.path}>
+                            <FontAwesomeIcon icon={item.icon} width={20} /> {item.name}
+                        </Link>
+                    </li>
+                })}
             </ul>
         </div>
     </>

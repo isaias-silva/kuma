@@ -26,7 +26,11 @@ export default function Mybots() {
     const botsComponent = bots.map((bot) => {
 
         return <Link href={`./bot/${bot._id}`} className={styles.block_normal}>
-            <Image src={bot.profile || profile.src} width={150} height={150} alt="profile" />
+            <Image src={bot.profile || profile.src} 
+            width={150} 
+            height={150} 
+            priority={true}
+            alt="profile" />
             <h3>{bot.name}</h3>
 
             <p>{bot.telegram_name}</p>
