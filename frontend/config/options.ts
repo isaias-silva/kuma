@@ -23,43 +23,43 @@ type OptionsAside = {
 const options: OptionsAside[] = [
     {
         name: 'Home',
-        path: '/user/',
+        path: '/user',
 
         icon: faHome,
     },
     {
         name: 'Edit profile',
-        path: '/user/profile/',
+        path: '/user/profile',
         icon: faEdit
     },
 
     {
         name: 'Your bots',
-        path: '/user/mybots/',
+        path: '/user/mybots',
         icon: faRobot
     },
     {
         name: 'Create flux',
-        path: '/user/',
+        path: '/user',
 
         icon: faDatabase,
     },
     {
         name: 'Contact List',
-        path: '/user/',
+        path: '/user',
         icon: faContactCard,
     }
     ,
     {
         name: 'Attendant List',
-        path: '/user/',
+        path: '/user',
         icon: faPeopleGroup,
     }
     ,
 
     {
         name: 'Dashboard',
-        path: '/user/',
+        path: '/user',
         icon: faDashboard,
     },
     {

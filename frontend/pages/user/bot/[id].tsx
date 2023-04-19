@@ -31,13 +31,17 @@ export default function Bot() {
 
   const validateBotName = (botName: string) => {
     let error;
-    if(botName?.length<=3){
-error="bot name is short, please use 4 digits or more."
+    if (botName?.length <= 3) {
+      error = "bot name is short, please use 4 digits or more."
     }
     return error
   }
   const validateBotTelegramName = (telegramBotName: string) => {
-
+    let error;
+    if (telegramBotName?.length <= 3) {
+      error = "telegram bot name is short, please use 4 digits or more."
+    }
+    return error
   }
   const route = useRouter()
   const [bot, setBot] = useState<TelBot>()
@@ -141,9 +145,9 @@ error="bot name is short, please use 4 digits or more."
                   <strong>bot name: </strong> {editMode?.editBotName ?
                     <input type="text" value={botName}
                       onInput={changeBotName}
-                      {...register("name", {})} /> : bot?.name || <span className={styles.loadText}></span>}
+                      {...register("name", { validate: validateBotName })} /> : bot?.name || <span className={styles.loadText}></span>}
 
-
+                      
                   <button onClick={() => { activeEditMode('botName', !editMode?.editBotName) }}>
 
                     <FontAwesomeIcon icon={editMode?.editBotName ? faSave : faEdit} width={16} height={16} />
@@ -155,7 +159,7 @@ error="bot name is short, please use 4 digits or more."
 
                       onInput={changeTelegramBotName}
 
-                      {...register("telegram_name", {})} />
+                      {...register("telegram_name", { validate: validateBotTelegramName })} />
                     : bot?.telegram_name || <span className={styles.loadText}></span>}
 
                   <button onClick={() => { activeEditMode('telBotName', !editMode?.editTelegramName) }}>
@@ -182,6 +186,9 @@ error="bot name is short, please use 4 digits or more."
               </ul>
             </div>
           </div>
+            {errors.name?<span className={styles.error}>{errors.name.message}</span>:null}
+            {errors.telegram_name?<span className={styles.error}>{errors.telegram_name.message}</span>:null}
+            {errors.profile?<span className={styles.error}>{errors.profile.message}</span>:null}
         </>
       </LayoutUser>
     </>

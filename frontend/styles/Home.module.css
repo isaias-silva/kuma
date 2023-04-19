@@ -1,3 +1,4 @@
+
 .loadText {
     display: block;
     width: 50%;
@@ -19,19 +20,19 @@ h1 .loadText {
 }
 
 .widowclos {
-
+    padding: 2px;
     position: relative;
-    width: 100%;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: #00000043;
 }
 
 .closbtn {
     width: 50px;
     height: 50px;
     font-size: 24px;
-    border-radius: 30%;
-    position: absolute;
-    left: 125px;
-    top: 0;
+    border-radius: 100%;
+   
     z-index: 10 !important;
     border: 1px solid var(--font_color);
     background-color: var(--main_color);
@@ -221,6 +222,9 @@ h1 .loadText {
     margin-top: 10px;
     position: relative
 }
+.botForm{
+    width: 100%;
+}
 
 .botForm .blocks {
     display: flex;
@@ -290,7 +294,7 @@ h1 .loadText {
 
 }
 
-.login span, .editForm span, .botForm span {
+.login span, .editForm span, .botForm span, span.error{
     display: block;
     margin: auto;
     margin-top: 10px;
@@ -413,6 +417,7 @@ h1 .loadText {
     display: grid;
     height: 100%;
     grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: 1;
     grid-gap: 10px;
     text-align: center;
 
@@ -422,7 +427,6 @@ h1 .loadText {
 
 .block, .block_normal, .blockPlus {
 
-    min-height: 300px;
     margin: auto;
     margin: 4px;
     background-color: var(--modal_color);
@@ -546,6 +550,10 @@ li .loadText, .botInfo li input {
     border-radius: 20px;
     padding: 5px;
     box-shadow: 3px 3px #000;
+}
+.activeItem {
+    background-color: rgba(0, 0, 0, 0.571);
+    color: #fff;
 }
 
 
