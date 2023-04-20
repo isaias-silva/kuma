@@ -7,6 +7,8 @@ import { Model } from 'mongoose';
 import { User } from './user.model';
 import { hash } from 'bcrypt'
 import { UpdateUserDto } from './update-user.dto';
+import * as fs from 'fs';
+
 
 @Injectable()
 export class UserServices {
@@ -29,10 +31,10 @@ export class UserServices {
 
 
   async create(doc: User) {
-   
+
     try {
       const existingUser = await this.checkUserWithName(doc.name);
-
+    
       if (existingUser) {
         const error = new Error('userName exists');
         error.name = 'ConflictError';
@@ -42,9 +44,10 @@ export class UserServices {
       const formattedUser = { ...doc };
       const salt = 10;
       formattedUser.password = await hash(formattedUser.password, salt);
-
+     formattedUser.profile= fs.readFileSync('./src/assets/profile.png')
 
       const result = await new this.userModel(formattedUser).save();
+    
       const {  adm, name, _id, active_service, days_use } = result
       const token = jwt.sign({  adm, name, _id, active_service, days_use }, process.env.SECRET)
       this.getJob(result, result.id)

@@ -1,6 +1,7 @@
 import styles from '@/styles/Home.module.css'
 import Link from 'next/link'
-import load from '../public/load.gif'
+import load from '@/public/load.gif'
+import genericProfile from '@/public/login.png'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faMoon,
@@ -15,7 +16,6 @@ import getUserInfo from '@/services/userInfo';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import options from '@/config/options';
-
 
 export default function Aside() {
     const route = useRouter()
@@ -68,7 +68,8 @@ export default function Aside() {
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
                 <h3>{userInfo?.name || <span className={styles.loadText}></span>} </h3>
-                <span>days of use: {userInfo?.days_use}</span>
+               {userInfo?.adm? <span>Adm</span>:<span>Days of use: {userInfo?.days_use}</span>}
+               
             </div>
             <ul>
 
