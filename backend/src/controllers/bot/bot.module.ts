@@ -11,8 +11,8 @@ import { TelegramBotSchema } from './bot.schema';
         }]),
     ],/**imports */
     providers: [BotServices]/*services */,
-    controllers: [BotController]/*controller */
-
+    controllers: [BotController]/*controller */,
+    exports: [BotServices]
 })
 export class BotModule {
 

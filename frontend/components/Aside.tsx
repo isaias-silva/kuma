@@ -23,6 +23,7 @@ export default function Aside() {
     const [isNoturne, setNoturne] = useState<boolean>()
 
     useEffect(() => {
+        
         //is noturne
         const theme = Cookies.get('theme-dark')
         if (theme && typeof document != "undefined") {
@@ -74,8 +75,9 @@ export default function Aside() {
 
 
                 {options.map((item, i) => {
-                    return <li key={i} onClick={item.callback}>
-                        <Link href={item.path}>
+                    return <li key={i} onClick={item.callback}
+                    className={route.pathname==item.path?styles.activeItem:styles.normal}>
+                        <Link href={item.path} >
                             <FontAwesomeIcon icon={item.icon} width={20} /> {item.name}
                         </Link>
                     </li>

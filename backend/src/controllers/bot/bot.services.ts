@@ -3,8 +3,7 @@ import { InjectModel } from "@nestjs/mongoose";
 import { TelBot } from "./bot.schema";
 import { Model } from "mongoose";
 import axios from "axios";
-
-import * as TelegramBot from 'node-telegram-bot-api';
+import generateFormData from "src/utils/generateFormData";
 
 
 @Injectable()
@@ -25,9 +24,9 @@ export class BotServices {
                 throw new HttpException('bot not found', HttpStatus.NOT_FOUND)
             }
             const updatedBot = await this.generateBotInfo(bot, ownerId)
-          
+
             await this.botModel.updateOne({ _id: bot._id }, updatedBot)
-            
+
             return bot
         } catch (err) {
             throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
@@ -65,8 +64,40 @@ export class BotServices {
 
         }
     }
-    async updateBot(ownerId: string) {
+    async updateBot(ownerId: string, updateInfo: TelBot) {
+        try {
 
+            if (updateInfo.telegram_name) {
+
+                await axios.post(`https://api.telegram.org/bot${updateInfo.apiKey}/setMyProfileName`, {
+                    name: updateInfo.telegram_name
+                }).then(response => {
+                    return response
+                }).catch(error => {
+                    return error.response
+                });
+            }
+            if (updateInfo.name) {
+                await this.botModel.updateOne({ ownerId, apiKey: updateInfo.apiKey }, { name: updateInfo.name })
+            }
+
+        } catch (err) {
+            throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+    async updateBotProfile(formData: FormData) {
+
+        const responseUpdateProfile = await axios.post(`https://api.telegram.org/bot${formData.get("botToken")}/setMyProfile`, formData, {
+            headers: { "Content-Type": "multipart/form-data" }
+        }).then((res) => {
+            return res.data
+        }).catch(err => { return err.response })
+        if (responseUpdateProfile.status != 200) {
+        
+            throw new HttpException('Error in update profile of telegram Bot', responseUpdateProfile.status)
+        }
+        
     }
     async generateBotInfo(bot: TelBot, ownerId: string) {
         const test = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getMe`)
@@ -94,11 +125,11 @@ export class BotServices {
                 const photos = response.data.result.photos;
 
                 if (photos.length > 0) {
-               
+
                     const photo = photos[photos.length - 1];
                     const fileId = photo[0].file_id;
 
-               
+
                     return axios.post(`https://api.telegram.org/bot${bot.apiKey}/getFile`, {
                         file_id: fileId,
                     });
@@ -127,7 +158,7 @@ export class BotServices {
             profile,
             bot_id: parseInt(info.id)
         }
-   
+
         return obj
     }
 }
