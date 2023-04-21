@@ -68,8 +68,9 @@ export default function Aside() {
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
                 <h3>{userInfo?.name || <span className={styles.loadText}></span>} </h3>
-               {userInfo?.adm? <span>Adm</span>:<span>Days of use: {userInfo?.days_use}</span>}
-               
+                
+                {userInfo?.days_use?<span>{userInfo.adm?'<Adm>': `Days of use: ${userInfo.days_use}`}</span>:<span className={styles.loadText}></span> }
+                
             </div>
             <ul>
 

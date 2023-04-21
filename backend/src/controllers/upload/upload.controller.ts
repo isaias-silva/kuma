@@ -15,45 +15,21 @@ export class UploadController {
   @Put('profile')
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(@UploadedFile() file, @Req() req, @Res() res) {
-try{
-    if (file) {
-      const profile: Buffer = file.buffer;
-      await this.userServices.update(req["user"]._id, { profile })
-      return new ResponseOfRequest('profile updated', HttpStatus.OK).sendResponse(res, {})
-    }else{
-      throw new HttpException("file type not supported" , HttpStatus.BAD_REQUEST)
+    try {
+      if (file) {
+        const profile: Buffer = file.buffer;
+        await this.userServices.update(req["user"]._id, { profile })
+       
+        return new ResponseOfRequest('profile updated', HttpStatus.OK).sendResponse(res, {})
+      } else {
+        throw new HttpException("file type not supported", HttpStatus.BAD_REQUEST)
+      }
+    } catch (err) {
+
+      throw new HttpException(err.message || "internal Error", err.status || HttpStatus.INTERNAL_SERVER_ERROR)
+
     }
-  }catch(err){
-  
-    throw new HttpException(err.message||"internal Error" , err.status|| HttpStatus.INTERNAL_SERVER_ERROR)
-    
-  }
 
   }
-  @Put('telegramBotProfile')
-  @UseInterceptors(FileInterceptor("file"))
-  async uploadprofile(
-
-    @UploadedFile() file,
-    @Req() req, @Res() res,
-    @Body('botToken') botToken) {
-      try{
-    if (file) {
-      const profile: Buffer = file.buffer;
-      const arrayBuffer = new Uint8Array(profile).buffer
-      const blob = new Blob([arrayBuffer])
-      const formData = await generateFormData(blob, [{ title: 'botToken', value: botToken }])
-    await this.botServices.updateBotProfile(formData);
-    return new ResponseOfRequest('profile bot updated', HttpStatus.OK).sendResponse(res, {})
-    }else{
-      throw new HttpException("file type not supported" , HttpStatus.BAD_REQUEST)
-    }
-  }catch(err){
-    throw new HttpException(err.message||"internal Error" , err.status|| HttpStatus.INTERNAL_SERVER_ERROR)
-    
-  }
-
-
-  }
-
+ 
 }

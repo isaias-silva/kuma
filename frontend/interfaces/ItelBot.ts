@@ -6,5 +6,6 @@ export default interface TelBot {
     ownerId: string
     apiKey: string
     messages: [],
-    bot_id: number
+    bot_id: number,
+    description:string
 }

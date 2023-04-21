@@ -3,7 +3,8 @@ import { InjectModel } from "@nestjs/mongoose";
 import { TelBot } from "./bot.schema";
 import { Model } from "mongoose";
 import axios from "axios";
-import generateFormData from "src/utils/generateFormData";
+
+import * as TelegramBot from "node-telegram-bot-api";
 
 
 @Injectable()
@@ -64,21 +65,12 @@ export class BotServices {
 
         }
     }
-    async updateBot(ownerId: string, updateInfo: TelBot) {
+    async updateBotNames(ownerId: string, updateBotNames: { name: string, apiKey: string }) {
         try {
+            const { name, apiKey } = updateBotNames
 
-            if (updateInfo.telegram_name) {
-
-                await axios.post(`https://api.telegram.org/bot${updateInfo.apiKey}/setMyProfileName`, {
-                    name: updateInfo.telegram_name
-                }).then(response => {
-                    return response
-                }).catch(error => {
-                    return error.response
-                });
-            }
-            if (updateInfo.name) {
-                await this.botModel.updateOne({ ownerId, apiKey: updateInfo.apiKey }, { name: updateInfo.name })
+            if (name) {
+                await this.botModel.updateOne({ ownerId, apiKey: apiKey }, { name: name })
             }
 
         } catch (err) {
@@ -86,79 +78,59 @@ export class BotServices {
         }
 
     }
-    async updateBotProfile(formData: FormData) {
-
-        const responseUpdateProfile = await axios.post(`https://api.telegram.org/bot${formData.get("botToken")}/setMyProfile`, formData, {
-            headers: { "Content-Type": "multipart/form-data" }
-        }).then((res) => {
-            return res.data
-        }).catch(err => { return err.response })
-        if (responseUpdateProfile.status != 200) {
-        
-            throw new HttpException('Error in update profile of telegram Bot', responseUpdateProfile.status)
-        }
-        
-    }
+  
     async generateBotInfo(bot: TelBot, ownerId: string) {
-        const test = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getMe`)
-            .then((res) =>
-                res)
-            .catch((err) => err.response)
+        try {
+            const botObj = new TelegramBot(bot.apiKey, { polling: false });
+            const info = await botObj.getMe()
+            const profile = await axios.post(`https://api.telegram.org/bot${bot.apiKey}/getUserProfilePhotos`, {
+                user_id: info.id,
+            })
+                .then(response => {
+                    const photos = response.data.result.photos;
 
-        if (test.status != 200) {
-            throw new HttpException('invalid api key', HttpStatus.BAD_REQUEST)
+                    if (photos.length > 0) {
+
+                        const photo = photos[photos.length - 1];
+                        const fileId = photo[0].file_id;
+
+
+                        return axios.post(`https://api.telegram.org/bot${bot.apiKey}/getFile`, {
+                            file_id: fileId,
+                        });
+                    }
+                })
+                .then(response => {
+                    if (response) {
+                        const file = response.data.result;
+                        const fileUrl = `https://api.telegram.org/file/bot${bot.apiKey}/${file.file_path}`;
+
+                        return (fileUrl);
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    return null
+                });
+
+
+
+            const obj: TelBot = {
+                telegram_name: info.first_name,
+                name: bot.name,
+                apiKey: bot.apiKey,
+                ownerId,
+                messages: [],
+                profile,
+                description: '',
+                bot_id: info.id
+            }
+            return obj
+        } catch (err) {
+            console.log(err)
+            throw new HttpException(err.message || "internal error in obtain botinfo", err.status || 501)
         }
 
-        const message_data = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getUpdates`).then(response => {
-            return response.data.result;
-        }).catch((err) => {
-            return 0
-        })
-        const info: { id: string, first_name: string } | null = await axios.get(`https://api.telegram.org/bot${bot.apiKey}/getMe`)
-            .then((res) => { return res.data.result }).catch((err) => {
-                return null
-            })
-        const profile = await axios.post(`https://api.telegram.org/bot${bot.apiKey}/getUserProfilePhotos`, {
-            user_id: info.id,
-        })
-            .then(response => {
-                const photos = response.data.result.photos;
 
-                if (photos.length > 0) {
-
-                    const photo = photos[photos.length - 1];
-                    const fileId = photo[0].file_id;
-
-
-                    return axios.post(`https://api.telegram.org/bot${bot.apiKey}/getFile`, {
-                        file_id: fileId,
-                    });
-                }
-            })
-            .then(response => {
-                if (response) {
-                    const file = response.data.result;
-                    const fileUrl = `https://api.telegram.org/file/bot${bot.apiKey}/${file.file_path}`;
-
-                    return (fileUrl);
-                }
-            })
-            .catch(error => {
-                console.error(error);
-                return null
-            });
-
-
-        const obj: TelBot = {
-            telegram_name: info.first_name,
-            name: bot.name,
-            apiKey: bot.apiKey,
-            ownerId,
-            messages: message_data,
-            profile,
-            bot_id: parseInt(info.id)
-        }
-
-        return obj
     }
 }

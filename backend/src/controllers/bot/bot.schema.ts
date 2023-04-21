@@ -9,7 +9,8 @@ export const TelegramBotSchema = new mongoose.Schema({
     telegram_name: { type: String },
     messages: [],
     profile: { type: String },
-    bot_id: { type: Number }
+    bot_id: { type: Number },
+    description: {type:String}
 
 });
 type messages = {
@@ -25,5 +26,6 @@ export interface TelBot {
     ownerId: string
     apiKey: string,
     bot_id: number,
+    description?: string
     messages: []
 }

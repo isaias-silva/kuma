@@ -1,9 +1,10 @@
-import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpStatus, Param, Post, Put, Req, Res } from '@nestjs/common';
 import { BotServices } from './bot.services';
 import { ResponseOfRequest } from 'src/utils/ResponseOfRequest';
 import { TelBot } from './bot.schema';
 import { CreateBotDto } from './create-bot.dto';
 import { validateSync } from 'class-validator';
+import { UpdateBotDto } from './update-bot.dto';
 
 @Controller('bot')
 export class BotController {
@@ -33,6 +34,21 @@ export class BotController {
         await this.service.createBot(req["user"]._id, bot)
 
         return new ResponseOfRequest('bot created', 200).sendResponse(res, {})
+    }
+    @Put('/update')
+    async update(@Req() req, @Res() res, @Body() body: TelBot) {
+        const { telegram_name, name, apiKey } = body
+        const validatedBot = new UpdateBotDto()
+        validatedBot.name = name
+        validatedBot.apiKey = apiKey
+     
+        const erros = validateSync(validatedBot)
+        if (erros.length > 0) {
+            return new ResponseOfRequest('error in updated bot', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
+        }
+        await this.service.updateBotNames(req["user"]._id, validatedBot)
+
+        return new ResponseOfRequest('bot updated', 200).sendResponse(res, {})
     }
     @Delete('/delete')
     async delete(@Req() req, @Res() res, @Body() body) {

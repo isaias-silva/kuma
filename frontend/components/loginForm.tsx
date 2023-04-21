@@ -98,7 +98,7 @@ export default function LoginForm() {
             </div>
 
             <button type="submit">Login</button>
-            <Link href={'https://hihihi.com'}>don't have an account? contact the admin!</Link>
+            <Link href={'https://hihihi.com'}>Are you new here? click to assign!</Link>
         </form>
     );
 };
