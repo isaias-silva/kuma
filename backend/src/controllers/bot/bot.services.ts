@@ -9,8 +9,10 @@ import * as TelegramBot from "node-telegram-bot-api";
 
 @Injectable()
 export class BotServices {
+    botInstance?: TelegramBot;
     constructor(
         @InjectModel('Bot') private readonly botModel: Model<TelBot>,
+
     ) {
     }
     async getMybots(ownerId: string) {
@@ -78,11 +80,16 @@ export class BotServices {
         }
 
     }
-  
+
     async generateBotInfo(bot: TelBot, ownerId: string) {
         try {
-            const botObj = new TelegramBot(bot.apiKey, { polling: false });
-            const info = await botObj.getMe()
+
+            this.botInstance = new TelegramBot(bot.apiKey, { polling: false });
+
+            const info = await this.botInstance.getMe()
+            const comands = await this.botInstance.getMyCommands()
+            console.log(comands)
+
             const profile = await axios.post(`https://api.telegram.org/bot${bot.apiKey}/getUserProfilePhotos`, {
                 user_id: info.id,
             })
@@ -114,7 +121,7 @@ export class BotServices {
                 });
 
 
-
+            this.botInstance = null
             const obj: TelBot = {
                 telegram_name: info.first_name,
                 name: bot.name,

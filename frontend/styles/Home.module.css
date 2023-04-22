@@ -489,7 +489,7 @@ a.block_normal:hover img {
 .botDiv {
     width: 100%;
     display: flex;
-
+    border-bottom: 2px solid var(--font_color);
 }
 
 .botDiv .botInfo {

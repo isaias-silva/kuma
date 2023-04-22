@@ -28,9 +28,9 @@ export default function Bot() {
 
 
   const onSubmit = async (data: UpdateBotData) => {
+    const newValue = { editBotName: false }
     if (bot?.apiKey) {
-      if (data.name) {
-        const newValue = { editBotName: false }
+      if (data.name && data.name != bot.name) {
         setEditMode(newValue)
         const response = await updateBotName(data.name, bot?.apiKey)
         if (response.status == 200) {
@@ -38,6 +38,9 @@ export default function Bot() {
         } else {
           alert('erro')
         }
+      }else{
+        
+        setEditMode(newValue)
       }
 
 
