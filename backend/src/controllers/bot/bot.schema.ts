@@ -1,5 +1,9 @@
 
 import * as mongoose from 'mongoose';
+import * as TelegramBot from "node-telegram-bot-api";
+
+type Message = TelegramBot.Message
+type Comand = TelegramBot.BotCommand
 
 export const TelegramBotSchema = new mongoose.Schema({
 
@@ -7,17 +11,14 @@ export const TelegramBotSchema = new mongoose.Schema({
     ownerId: { type: String, require: true },
     apiKey: { type: String },
     telegram_name: { type: String },
-    messages: [],
+    messages: { type: Array<Message> },
+    comands: { type: Array<Comand> },
     profile: { type: String },
     bot_id: { type: Number },
-    description: {type:String}
+    description: { type: String }
 
 });
-type messages = {
-    contact: string
-    message_item: string
-    profile: string
-}
+
 
 export interface TelBot {
     profile: string,
@@ -27,5 +28,6 @@ export interface TelBot {
     apiKey: string,
     bot_id: number,
     description?: string
-    messages: []
+    messages: Message[]
+    comands:Comand[]
 }

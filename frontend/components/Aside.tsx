@@ -6,7 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faMoon,
     faSun,
-  
+    faCrow,
+    faDiamond,
+    faBiking,
+    faChessKing
 
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -23,7 +26,7 @@ export default function Aside() {
     const [isNoturne, setNoturne] = useState<boolean>()
 
     useEffect(() => {
-        
+
         //is noturne
         const theme = Cookies.get('theme-dark')
         if (theme && typeof document != "undefined") {
@@ -68,9 +71,9 @@ export default function Aside() {
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
                 <h3>{userInfo?.name || <span className={styles.loadText}></span>} </h3>
-                
-                {userInfo?.days_use?<span>{userInfo.adm?'<Adm>': `Days of use: ${userInfo.days_use}`}</span>:<span className={styles.loadText}></span> }
-                
+
+                {userInfo?.days_use ? <span>{userInfo.adm ? <><FontAwesomeIcon icon={faChessKing} width={16} height={16} /><strong>adm</strong><FontAwesomeIcon icon={faChessKing} width={16} height={16} /></> : `Days of use: ${userInfo.days_use}`}</span> : <span className={styles.loadText}></span>}
+
             </div>
             <ul>
 
@@ -78,7 +81,7 @@ export default function Aside() {
 
                 {options.map((item, i) => {
                     return <li key={i} onClick={item.callback}
-                    className={route.pathname==item.path?styles.activeItem:styles.normal}>
+                        className={route.pathname == item.path ? styles.activeItem : styles.normal}>
                         <Link href={item.path} >
                             <FontAwesomeIcon icon={item.icon} width={20} /> {item.name}
                         </Link>

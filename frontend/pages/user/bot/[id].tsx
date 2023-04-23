@@ -6,11 +6,11 @@ import { getBotForId } from "@/services/botInfo"
 import TelBot from "@/interfaces/ItelBot"
 import Image from "next/image"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit, faSave } from "@fortawesome/free-solid-svg-icons"
+import { faEdit, faPlus, faSave, faTrash } from "@fortawesome/free-solid-svg-icons"
 import loadImg from '@/public/load.gif'
-import corrupted from '@/public/corrupted.png'
+
 import { useForm } from "react-hook-form"
-import { updateBotName, updateProfileBot } from "@/services/updateTelegramBotInfo"
+import { updateBotName } from "@/services/updateTelegramBotInfo"
 type editControl = {
   editBotName: boolean,
 
@@ -38,8 +38,8 @@ export default function Bot() {
         } else {
           alert('erro')
         }
-      }else{
-        
+      } else {
+
         setEditMode(newValue)
       }
 
@@ -156,6 +156,49 @@ export default function Bot() {
             </div>
           </div>
           {errors.name ? <span className={styles.error}>{errors.name.message}</span> : null}
+
+         
+            <div className={styles.comands}>
+              <h2>commands:</h2>
+              <ul>
+                <li>
+                  <div className={styles.createCommand}>
+                    <FontAwesomeIcon icon={faPlus} width={24} />
+                  </div>
+                </li>
+
+                  {bot && bot?.comands.length>0?
+                <>{bot.comands.map((item, key) => {
+                  return <li key={key}>
+                    <strong>/{item.command}</strong>
+                    <div className={styles.explanation}>
+                      <p>{item.description}</p>
+                    </div>
+                    <select name="flow vinculated">
+                      <option> select flow of command</option>
+                      <option value="flow 1"> flow 1</option>
+                      <option value="flow 2"> flow 2</option>
+                      <option value="flow 3"> flow 3</option>
+                      <option value="flow 4"> flow 4</option>
+                      <option value="flow 5"> flow 5</option>
+                      <option value="flow 6"> flow 6</option>
+                    </select>
+                    <div className={styles.control}>
+                      <button><FontAwesomeIcon icon={faTrash} width={24} height={24} /></button>
+
+                    </div>
+                  </li>
+                  
+                })}
+              </>    
+                  :
+                  <p>commands not found.</p>
+                  }
+              
+              </ul>
+            </div>
+          
+
         </>
       </LayoutUser>
     </>

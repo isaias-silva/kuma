@@ -88,40 +88,14 @@ export class BotServices {
 
             const info = await this.botInstance.getMe()
             const comands = await this.botInstance.getMyCommands()
+            const profiles = (await this.botInstance.getUserProfilePhotos(info.id))
+            const  file_id  =profiles.photos.length>0? profiles.photos[0][0].file_id:null
+            const profile =file_id? await this.botInstance.getFileLink(file_id):null
             console.log(comands)
 
-            const profile = await axios.post(`https://api.telegram.org/bot${bot.apiKey}/getUserProfilePhotos`, {
-                user_id: info.id,
-            })
-                .then(response => {
-                    const photos = response.data.result.photos;
-
-                    if (photos.length > 0) {
-
-                        const photo = photos[photos.length - 1];
-                        const fileId = photo[0].file_id;
+       
 
 
-                        return axios.post(`https://api.telegram.org/bot${bot.apiKey}/getFile`, {
-                            file_id: fileId,
-                        });
-                    }
-                })
-                .then(response => {
-                    if (response) {
-                        const file = response.data.result;
-                        const fileUrl = `https://api.telegram.org/file/bot${bot.apiKey}/${file.file_path}`;
-
-                        return (fileUrl);
-                    }
-                })
-                .catch(error => {
-                    console.error(error);
-                    return null
-                });
-
-
-            this.botInstance = null
             const obj: TelBot = {
                 telegram_name: info.first_name,
                 name: bot.name,
@@ -130,8 +104,10 @@ export class BotServices {
                 messages: [],
                 profile,
                 description: '',
-                bot_id: info.id
+                bot_id: info.id,
+                comands: comands
             }
+            this.botInstance = null
             return obj
         } catch (err) {
             console.log(err)
