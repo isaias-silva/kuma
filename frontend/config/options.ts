@@ -40,26 +40,26 @@ const options: OptionsAside[] = [
     },
     {
         name: 'Create flux',
-        path: '/user',
+        path: '/user/createFlux',
 
         icon: faDatabase,
     },
     {
         name: 'Contact List',
-        path: '/user',
+        path: '/user/createFlux',
         icon: faContactCard,
     }
     ,
     {
         name: 'Attendant List',
-        path: '/user',
+        path: '/user/attendants',
         icon: faPeopleGroup,
     }
     ,
 
     {
         name: 'Dashboard',
-        path: '/user',
+        path: '/user/dashboard',
         icon: faDashboard,
     },
     {

@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { TelBot } from "./bot.schema";
 import { Model } from "mongoose";
-import axios from "axios";
+import axios, { HttpStatusCode } from "axios";
 
 import * as TelegramBot from "node-telegram-bot-api";
 
@@ -79,6 +79,20 @@ export class BotServices {
             throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+    async deleteBotCommand(apiKey:string,command:string){
+        try{
+            this.botInstance= new TelegramBot(apiKey)
+            const commands=await this.botInstance.getMyCommands()
+            const [commandRm]=commands.filter((value)=>value.command==command)
+           if(!commandRm){
+            throw new HttpException("command don't exists.",HttpStatusCode.BadRequest)
+           }
+           await this.botInstance.setMyCommands(commands.splice(commands.indexOf(commandRm),1))
+        }
+        catch(err){
+            throw new HttpException(err.message || "internal error in delete bot command", err.status || 501)
+        }
     }
 
     async generateBotInfo(bot: TelBot, ownerId: string) {

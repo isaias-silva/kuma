@@ -11,10 +11,11 @@ import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
-import Cookie from 'js-cookie'
+import Cookies from 'js-cookie'
 import login from '@/services/login';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
+import DefaultConfigModal from '@/utils/generateConfigModal';
 
 export default function LoginForm() {
     type LoginFormInputs = {
@@ -31,24 +32,28 @@ export default function LoginForm() {
 
         const MySwal = withReactContent(Swal)
 
+
         if (response.status == 201) {
-            Cookie.set('token', response.data.data.token)
+            Cookies.set('token', response.data.data.token)
 
-            MySwal.fire({
-                title: 'Login successful',
-                icon: 'success',
-                text: ' Welcome!',
 
-            }).then(() => {
+            MySwal.fire(
+                DefaultConfigModal({
+                    text: 'login is a success',
+                    icon: 'success',
+                    title: 'wellcome'
+                })
+            ).then(() => {
                 router.push('/user')
 
             })
         } else {
-            MySwal.fire({
-                title: response.status,
+            MySwal.fire(DefaultConfigModal({
+                title: response.status.toString(),
                 icon: 'error',
                 text: response.data.message
-            })
+            }))
+          
 
         }
     };

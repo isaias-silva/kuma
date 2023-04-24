@@ -11,6 +11,7 @@ import loadImg from '@/public/load.gif'
 
 import { useForm } from "react-hook-form"
 import { updateBotName } from "@/services/updateTelegramBotInfo"
+import Swal from "sweetalert2"
 type editControl = {
   editBotName: boolean,
 
@@ -34,9 +35,17 @@ export default function Bot() {
         setEditMode(newValue)
         const response = await updateBotName(data.name, bot?.apiKey)
         if (response.status == 200) {
-          alert('vitoria')
+          Swal.fire({
+            background:'#000',
+            text:response.data.message,
+            icon:'success'
+          })
         } else {
-          alert('erro')
+          Swal.fire({
+            title:response.status,
+            text:response.message,
+            icon:'error'
+          }) 
         }
       } else {
 
