@@ -7,6 +7,7 @@ import styles from '@/styles/Home.module.css'
 import Image from 'next/image';
 import infoTelegramUser from '@/services/telegramService';
 import createBot from '@/services/createBot';
+import DefaultConfigModal from '@/utils/generateConfigModal';
 
 
 
@@ -30,11 +31,18 @@ export default function CreateBotForm() {
     const onSubmit = async (data: CreateBotInputs) => {
         const result = await createBot(data.botName, data.apiKey)
         if (result.status == 200) {
-            alert('bot created')
-            route.reload()
+            DefaultConfigModal({
+                text: result.data.message,
+                title: 'success',
+                icon: 'success'
+            }).fire()
+            
         } else {
-            alert(result.status + " " + result.data.message)
-            console.log(result.data.data)
+            DefaultConfigModal({
+                text: result.data.message,
+                title: result.status,
+                icon: 'error'
+            }).fire()
         }
     };
 
@@ -85,7 +93,7 @@ export default function CreateBotForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.botForm}>
-          
+
             <h3>create bot</h3>
             <div className={styles.blocks}>
                 <div className={styles.block}>

@@ -29,31 +29,27 @@ export default function LoginForm() {
 
     const onSubmit = async (data: LoginFormInputs) => {
         const response: { status: number, data: { message: string, data: { token: string } } } = await login(data);
-
-        const MySwal = withReactContent(Swal)
-
-
         if (response.status == 201) {
             Cookies.set('token', response.data.data.token)
 
 
-            MySwal.fire(
-                DefaultConfigModal({
-                    text: 'login is a success',
-                    icon: 'success',
-                    title: 'wellcome'
-                })
-            ).then(() => {
-                router.push('/user')
 
-            })
+            DefaultConfigModal({
+                text: 'login is a success',
+                icon: 'success',
+                title: 'wellcome'
+            }).fire()
+                .then(() => {
+                    router.push('/user')
+
+                })
         } else {
-            MySwal.fire(DefaultConfigModal({
+            DefaultConfigModal({
                 title: response.status.toString(),
                 icon: 'error',
                 text: response.data.message
-            }))
-          
+            }).fire()
+
 
         }
     };

@@ -28,7 +28,7 @@ export default function Mybots() {
         return <Link href={`./bot/${bot._id}`} className={styles.block_normal}>
             <Image src={bot.profile || profile.src} 
             width={150} 
-            height={150} 
+            height={180} 
             priority={true}
             alt="profile" />
             <h3>{bot.name}</h3>

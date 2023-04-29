@@ -12,6 +12,7 @@ import loadImg from '@/public/load.gif'
 import { useForm } from "react-hook-form"
 import { updateBotName } from "@/services/updateTelegramBotInfo"
 import Swal from "sweetalert2"
+import DefaultConfigModal from "@/utils/generateConfigModal"
 type editControl = {
   editBotName: boolean,
 
@@ -34,18 +35,14 @@ export default function Bot() {
       if (data.name && data.name != bot.name) {
         setEditMode(newValue)
         const response = await updateBotName(data.name, bot?.apiKey)
+
         if (response.status == 200) {
-          Swal.fire({
-            background:'#000',
-            text:response.data.message,
-            icon:'success'
-          })
+
+          DefaultConfigModal({ text: response.data.message, title: 'sucess', icon: 'success' }).fire()
+       
         } else {
-          Swal.fire({
-            title:response.status,
-            text:response.message,
-            icon:'error'
-          }) 
+          DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
+       
         }
       } else {
 
@@ -61,6 +58,9 @@ export default function Bot() {
     if (botName && botName?.length <= 3) {
       error = "bot name is short, please use 4 digits or more."
     }
+    if (botName && botName?.length >= 16) {
+      error = "bot name is long, the max length is 16 digits."
+    }
     return error
   }
 
@@ -72,9 +72,7 @@ export default function Bot() {
 
       getBotForId(route.query.id).then((res) => {
         if (res.status == '200') {
-          if (!botName) {
-            setBotName(res.data.data.name)
-          }
+
           setBot(res.data.data)
 
         } else {
@@ -85,7 +83,7 @@ export default function Bot() {
 
       })
     }
-  }, [route.query])
+  }, [route.query, bot])
   const changeBotName = (ev: any) => {
     if (ev && typeof ev.target.value == "string") {
       setBotName(ev.target.value)
@@ -161,22 +159,24 @@ export default function Bot() {
                   <strong>messages:</strong> {bot?.messages.length}
 
                 </li>
+                <li> <button><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button></li>
               </ul>
+
             </div>
           </div>
           {errors.name ? <span className={styles.error}>{errors.name.message}</span> : null}
 
-         
-            <div className={styles.comands}>
-              <h2>commands:</h2>
-              <ul>
-                <li>
-                  <div className={styles.createCommand}>
-                    <FontAwesomeIcon icon={faPlus} width={24} />
-                  </div>
-                </li>
 
-                  {bot && bot?.comands.length>0?
+          <div className={styles.comands}>
+            <h2>commands:</h2>
+            <ul>
+              <li>
+                <div className={styles.createCommand}>
+                  <FontAwesomeIcon icon={faPlus} width={24} />
+                </div>
+              </li>
+
+              {bot && bot?.comands.length > 0 ?
                 <>{bot.comands.map((item, key) => {
                   return <li key={key}>
                     <strong>/{item.command}</strong>
@@ -197,16 +197,16 @@ export default function Bot() {
 
                     </div>
                   </li>
-                  
+
                 })}
-              </>    
-                  :
-                  <p>commands not found.</p>
-                  }
-              
-              </ul>
-            </div>
-          
+                </>
+                :
+                <p>commands not found.</p>
+              }
+
+            </ul>
+          </div>
+
 
         </>
       </LayoutUser>

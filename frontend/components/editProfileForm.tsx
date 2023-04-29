@@ -19,6 +19,7 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Cookies from 'js-cookie';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
+import DefaultConfigModal from '@/utils/generateConfigModal';
 
 
 export default function EditProfileForm() {
@@ -53,28 +54,25 @@ export default function EditProfileForm() {
         if (!name && !profile[0]) {
             return
         }
-        const theme = Cookies.get('theme-dark')
-        const MySwal = withReactContent(Swal)
-        MySwal.fire({
 
-            title: 'Do you want to save the changes?',
-            showDenyButton: true,
-            showCancelButton: true,
-            confirmButtonText: 'Save',
-            denyButtonText: `Don't save`,
-            iconColor: theme ? '#003b58' : '#51a8d8',
-
-        }).then(async (result) => {
+        DefaultConfigModal({
+            text: 'Do you want to save the changes?',
+            title: 'save changes?',
+            icon: 'question',
+            showButtons: true
+        }).fire().then(async (result) => {
             if (result.isConfirmed) {
                 if (data.name) {
                     const res = await updateName(data.name)
                     if (res.status == 200) {
                         router.reload()
                     } else {
-                        MySwal.fire({
+                        DefaultConfigModal({
                             text: res.data.message,
-                        })
-                       
+                            title: res.status,
+                            icon: 'error'
+                        }).fire()
+
                     }
 
                 }

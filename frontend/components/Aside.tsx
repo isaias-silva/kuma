@@ -70,6 +70,7 @@ export default function Aside() {
                 <div className={styles.profile}>
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
+                <br/>
                 {userInfo?.days_use ? <span>{userInfo.adm ? <><FontAwesomeIcon icon={faChessKing} width={16} height={16} /><strong>adm</strong><FontAwesomeIcon icon={faChessKing} width={16} height={16} /></> : `Days of use: ${userInfo.days_use}`}</span> : <span className={styles.loadText}></span>}
 
                 <h3>{userInfo?.name || <span className={styles.loadText}></span>} </h3>

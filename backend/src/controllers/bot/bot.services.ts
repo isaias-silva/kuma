@@ -28,7 +28,7 @@ export class BotServices {
             }
             const updatedBot = await this.generateBotInfo(bot, ownerId)
 
-            await this.botModel.updateOne({ _id: bot._id }, updatedBot)
+            await bot.updateOne({ _id: bot._id }, updatedBot)
 
             return bot
         } catch (err) {
@@ -72,6 +72,7 @@ export class BotServices {
             const { name, apiKey } = updateBotNames
 
             if (name) {
+               
                 await this.botModel.updateOne({ ownerId, apiKey: apiKey }, { name: name })
             }
 
@@ -80,20 +81,37 @@ export class BotServices {
         }
 
     }
-    async deleteBotCommand(apiKey:string,command:string){
-        try{
-            this.botInstance= new TelegramBot(apiKey)
-            const commands=await this.botInstance.getMyCommands()
-            const [commandRm]=commands.filter((value)=>value.command==command)
-           if(!commandRm){
-            throw new HttpException("command don't exists.",HttpStatusCode.BadRequest)
-           }
-           await this.botInstance.setMyCommands(commands.splice(commands.indexOf(commandRm),1))
+    async deleteBotCommand(apiKey: string, command: string) {
+        try {
+            this.botInstance = new TelegramBot(apiKey)
+            const commands = await this.botInstance.getMyCommands()
+            const [commandRm] = commands.filter((value) => value.command == command)
+            if (!commandRm) {
+                throw new HttpException("command don't exists.", HttpStatusCode.BadRequest)
+            }
+            await this.botInstance.setMyCommands(commands.splice(commands.indexOf(commandRm), 1))
         }
-        catch(err){
+        catch (err) {
             throw new HttpException(err.message || "internal error in delete bot command", err.status || 501)
         }
     }
+    async createBotCommand(apiKey: string, command: string, description: string) {
+        try {
+            this.botInstance = new TelegramBot(apiKey)
+            const commands = await this.botInstance.getMyCommands()
+            const [commandRm] = commands.filter((value) => value.command == command)
+            if (commandRm) {
+                throw new HttpException("command name has exists.", HttpStatusCode.BadRequest)
+            }
+
+            commands.push({ command: command, description })
+            await this.botInstance.setMyCommands(commands)
+        }
+        catch (err) {
+            throw new HttpException(err.message || "internal error in delete bot command", err.status || 501)
+        }
+    }
+
 
     async generateBotInfo(bot: TelBot, ownerId: string) {
         try {
@@ -103,11 +121,11 @@ export class BotServices {
             const info = await this.botInstance.getMe()
             const comands = await this.botInstance.getMyCommands()
             const profiles = (await this.botInstance.getUserProfilePhotos(info.id))
-            const  file_id  =profiles.photos.length>0? profiles.photos[0][0].file_id:null
-            const profile =file_id? await this.botInstance.getFileLink(file_id):null
-            console.log(comands)
+            const file_id = profiles.photos.length > 0 ? profiles.photos[0][0].file_id : null
+            const profile = file_id ? await this.botInstance.getFileLink(file_id) : null
+           
 
-       
+
 
 
             const obj: TelBot = {
@@ -119,8 +137,15 @@ export class BotServices {
                 profile,
                 description: '',
                 bot_id: info.id,
-                comands: comands
+                comands: comands.map((comand)=>{
+                    const {command,description}=comand
+                    return {
+                        command,
+                        description,
+                        flowId:undefined}
+                })
             }
+        
             this.botInstance = null
             return obj
         } catch (err) {
