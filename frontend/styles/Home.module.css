@@ -75,9 +75,10 @@ h1 .loadText {
 }
 
 .section h1 {
+    
     background-color: var(--component_color);
     margin: 0;
-    margin-bottom: 20px;
+   margin-bottom: 10px;
     border-radius: 0 0 0 100px;
 
     box-sizing: border-box;
@@ -440,6 +441,7 @@ h1 .loadText {
 }
 
 .blockPlus {
+    min-height: 300px;
     background-color: #00000038;
     box-shadow: none;
     border: 4px dashed var(--font_color);

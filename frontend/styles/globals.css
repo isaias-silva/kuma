@@ -4,7 +4,7 @@
     --input_color: #c9e2f9;
     --component_color: #2a5c84cf;
     --font_color: #051a25;
-    --link_color: #0d5c91;
+    --link_color: #008ae6;
     --link_color_hover: #00e1ff;
 }
 
@@ -14,7 +14,7 @@
 
 *::-webkit-scrollbar {
     background-color: rgba(0, 0, 0, 0.244);
-    width: 5px;
+    width: 0px;
 }
 
 *::-webkit-scrollbar-thumb {
@@ -32,7 +32,7 @@ body.dark-mode {
     --main_color: #003b58;
     --modal_color: #1d1d1d;
     --input_color: #273142;
-    --component_color: #152533;
+    --component_color: #152533c2;
     --font_color: #fff;
 }
 
@@ -45,6 +45,7 @@ body::before {
     background-image: linear-gradient(to bottom, var(--main_color), var(--modal_color));
     top: 0;
     z-index: -2;
+   
 }
 
 body::after {
@@ -54,7 +55,7 @@ body::after {
     height: 100%;
     background-image: url('../public/animate_background.gif');
     background-size: cover;
-    filter: opacity(0.1);
+    filter: opacity(0.08);
     position: fixed;
     top: 0;
     z-index: -1;

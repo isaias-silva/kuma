@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form"
 import { updateBotName } from "@/services/updateTelegramBotInfo"
 import Swal from "sweetalert2"
 import DefaultConfigModal from "@/utils/generateConfigModal"
+import { deleteTelBot } from "@/services/deleteBot"
 type editControl = {
   editBotName: boolean,
 
@@ -29,7 +30,7 @@ export default function Bot() {
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateBotData>();
 
 
-  const onSubmit = async (data: UpdateBotData) => {
+  const onSubmitNewBotName = async (data: UpdateBotData) => {
     const newValue = { editBotName: false }
     if (bot?.apiKey) {
       if (data.name && data.name != bot.name) {
@@ -39,10 +40,10 @@ export default function Bot() {
         if (response.status == 200) {
 
           DefaultConfigModal({ text: response.data.message, title: 'sucess', icon: 'success' }).fire()
-       
+
         } else {
           DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
-       
+
         }
       } else {
 
@@ -76,8 +77,6 @@ export default function Bot() {
           setBot(res.data.data)
 
         } else {
-
-          console.log(res)
           route.push('/404')
         }
 
@@ -105,6 +104,22 @@ export default function Bot() {
     }
     setEditMode(control)
   }
+
+  const deleteBot = async () => {
+    if (!bot) {
+      return
+    }
+    const response = await deleteTelBot(bot._id)
+    if (response.status == 200) {
+
+      DefaultConfigModal({ text: response.data.message, title: 'sucess', icon: 'success' }).fire()
+
+    } else {
+      DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
+
+    }
+  }
+
   return (
     <>
       <LayoutUser title={bot?.name || 'bot'}>
@@ -132,7 +147,7 @@ export default function Bot() {
                       {...register("name", { validate: validateBotName })} /> : botName || bot?.name || <span className={styles.loadText}></span>}
 
 
-                  <button onClick={editMode?.editBotName ? handleSubmit(onSubmit) : () => {
+                  <button onClick={editMode?.editBotName ? handleSubmit(onSubmitNewBotName) : () => {
 
                     activeEditMode('botName', !editMode?.editBotName)
                   }}>
@@ -159,7 +174,7 @@ export default function Bot() {
                   <strong>messages:</strong> {bot?.messages.length}
 
                 </li>
-                <li> <button><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button></li>
+                <li> <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button></li>
               </ul>
 
             </div>
