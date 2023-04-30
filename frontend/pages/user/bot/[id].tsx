@@ -11,12 +11,13 @@ import loadImg from '@/public/load.gif'
 
 import { useForm } from "react-hook-form"
 import { updateBotName } from "@/services/updateTelegramBotInfo"
-import Swal from "sweetalert2"
+
 import DefaultConfigModal from "@/utils/generateConfigModal"
-import { deleteTelBot } from "@/services/deleteBot"
+import { deleteCommandTelBot, deleteTelBot } from "@/services/deleteBot"
+import CreateCommandForm from "@/components/createCommandForm"
 type editControl = {
   editBotName: boolean,
-
+  createCommand: boolean
 }
 type UpdateBotData = {
   name: string;
@@ -27,11 +28,13 @@ export default function Bot() {
   const [botName, setBotName] = useState<string>()
 
   const [editMode, setEditMode] = useState<editControl>()
+
+
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateBotData>();
 
 
   const onSubmitNewBotName = async (data: UpdateBotData) => {
-    const newValue = { editBotName: false }
+    const newValue = { editBotName: false, createCommand: false }
     if (bot?.apiKey) {
       if (data.name && data.name != bot.name) {
         setEditMode(newValue)
@@ -92,15 +95,19 @@ export default function Bot() {
 
 
 
-  function activeEditMode(key: 'botName', value: boolean) {
+  function activeEditMode(key: 'botName' | 'command', value: boolean) {
 
     const control: editControl = {
       editBotName: editMode?.editBotName || false,
-
+      createCommand: editMode?.createCommand || false,
     }
 
     if (key == 'botName') {
       control.editBotName = value
+    }
+    if (key == 'command') {
+      control.createCommand = value
+
     }
     setEditMode(control)
   }
@@ -109,16 +116,37 @@ export default function Bot() {
     if (!bot) {
       return
     }
+    DefaultConfigModal({ text: ' ', title: ' ', icon: 'success' }).showLoading()
+    
     const response = await deleteTelBot(bot._id)
     if (response.status == 200) {
 
-      DefaultConfigModal({ text: response.data.message, title: 'sucess', icon: 'success' }).fire()
+      return route.push('/user/mybots')
 
     } else {
       DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
 
     }
   }
+  const deleteCommand = async (command: string) => {
+    if (!bot) {
+      return
+    }
+    DefaultConfigModal({ text: ' ', title: ' ', icon: 'success' }).showLoading()
+    
+    const response = await deleteCommandTelBot(bot.apiKey, command)
+    if (response.status == 200) {
+
+
+      DefaultConfigModal({ text: response.data.message, title: "success", icon: 'success' }).fire()
+
+    } else {
+      DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
+
+    }
+
+  }
+
 
   return (
     <>
@@ -184,12 +212,21 @@ export default function Bot() {
 
           <div className={styles.comands}>
             <h2>commands:</h2>
+
             <ul>
-              <li>
-                <div className={styles.createCommand}>
-                  <FontAwesomeIcon icon={faPlus} width={24} />
-                </div>
-              </li>
+              {
+                editMode?.createCommand ? <CreateCommandForm callback={() => { activeEditMode('command', false) }} apiKey={bot?.apiKey} /> : <li>
+
+                  <div className={styles.createCommand}
+                    onClick={() => { activeEditMode('command', true) }}
+                  >
+
+                    <FontAwesomeIcon icon={faPlus} width={24} />
+                  </div>
+                </li>
+
+              }
+
 
               {bot && bot?.comands.length > 0 ?
                 <>{bot.comands.map((item, key) => {
@@ -208,7 +245,10 @@ export default function Bot() {
                       <option value="flow 6"> flow 6</option>
                     </select>
                     <div className={styles.control}>
-                      <button><FontAwesomeIcon icon={faTrash} width={24} height={24} /></button>
+                      <button onClick={() => {
+                        deleteCommand(item.command)
+
+                      }}><FontAwesomeIcon icon={faTrash} width={24} height={24} /></button>
 
                     </div>
                   </li>

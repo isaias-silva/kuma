@@ -3,8 +3,8 @@ import axiosService from "./axios";
 
 const token = Cookies.get('token')
 
-export default async function createBot(name: string, apiKey: string) {
-  
+export async function createBot(name: string, apiKey: string) {
+
     const info = await axiosService.post('/bot/create', {
         name: name,
         apiKey: apiKey
@@ -13,7 +13,28 @@ export default async function createBot(name: string, apiKey: string) {
 
             headers: {
                 'Authorization': `Bearer ${token}`,
-               
+
+            },
+        }).then(res => {
+
+            return res
+        }).catch((res) => {
+            console.log(res)
+            return res.response
+        })
+    return info
+}
+export async function addBotCommand(apiKey: string, command: string, description: string) {
+    const info = await axiosService.post('/bot/create_command', {
+        command,
+        description,
+        apiKey: apiKey
+    }
+        , {
+
+            headers: {
+                'Authorization': `Bearer ${token}`,
+
             },
         }).then(res => {
 

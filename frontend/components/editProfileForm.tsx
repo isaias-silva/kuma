@@ -65,6 +65,7 @@ export default function EditProfileForm() {
                 if (data.name) {
                     const res = await updateName(data.name)
                     if (res.status == 200) {
+                    
                         router.reload()
                     } else {
                         DefaultConfigModal({
@@ -83,8 +84,12 @@ export default function EditProfileForm() {
                         router.reload()
                     } else {
 
-                        alert(res.data.message)
-                        console.log(res)
+                        DefaultConfigModal({
+                            text: res.data.message,
+                            title: res.status,
+                            icon: 'error'
+                        }).fire()
+                        
                     }
 
 

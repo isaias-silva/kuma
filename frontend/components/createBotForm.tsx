@@ -6,13 +6,13 @@ import loadImage from '../public/load.gif'
 import styles from '@/styles/Home.module.css'
 import Image from 'next/image';
 import infoTelegramUser from '@/services/telegramService';
-import createBot from '@/services/createBot';
+import {createBot} from '@/services/createBot';
 import DefaultConfigModal from '@/utils/generateConfigModal';
 
 
 
 
-export default function CreateBotForm() {
+export default function CreateBotForm({ callback }: { callback?: Function }) {
     type CreateBotInputs = {
         botName: string;
         apiKey: string;
@@ -26,17 +26,27 @@ export default function CreateBotForm() {
 
 
 
-    const { register, handleSubmit, formState: { errors } } = useForm<CreateBotInputs>();
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<CreateBotInputs>();
 
     const onSubmit = async (data: CreateBotInputs) => {
+        DefaultConfigModal({
+            text: 'creating',
+            title: 'creating your bot...',
+            icon: 'info'
+        }).showLoading()
+        
         const result = await createBot(data.botName, data.apiKey)
+
         if (result.status == 200) {
             DefaultConfigModal({
                 text: result.data.message,
                 title: 'success',
                 icon: 'success'
             }).fire()
-            
+            reset()
+            if (callback) {
+                callback()
+            }
         } else {
             DefaultConfigModal({
                 text: result.data.message,
@@ -44,6 +54,7 @@ export default function CreateBotForm() {
                 icon: 'error'
             }).fire()
         }
+      
     };
 
     const validateBotName = (value: string) => {
@@ -93,7 +104,13 @@ export default function CreateBotForm() {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.botForm}>
-
+              <button type="button"
+            onClick={() => {
+                if (callback) {
+                    callback()
+                }
+            }}
+            className={styles.closbtn}>x</button>
             <h3>create bot</h3>
             <div className={styles.blocks}>
                 <div className={styles.block}>

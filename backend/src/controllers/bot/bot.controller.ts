@@ -41,7 +41,7 @@ export class BotController {
         const validatedBot = new UpdateBotDto()
         validatedBot.name = name
         validatedBot.apiKey = apiKey
-     
+
         const erros = validateSync(validatedBot)
         if (erros.length > 0) {
             return new ResponseOfRequest('error in updated bot', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
@@ -54,6 +54,18 @@ export class BotController {
     async delete(@Req() req, @Res() res, @Body() body) {
         await this.service.deleteBot(req["user"]._id, body.id)
         return new ResponseOfRequest('bot deleted', 200).sendResponse(res, {})
+
+    }
+    @Post('/create_command')
+    async createCommand(@Req() req, @Res() res, @Body() body) {
+        await this.service.createBotCommand(body.apiKey, body.command, body.description)
+        return new ResponseOfRequest(`command '${body.command}' create`, 200).sendResponse(res, {})
+
+    }
+    @Delete('/delete_command')
+    async deleteCommand(@Req() req, @Res() res, @Body() body) {
+        await this.service.deleteBotCommand(body.apiKey, body.command)
+        return new ResponseOfRequest(`command '${body.command}' deleted`, 200).sendResponse(res, {})
 
     }
 }

@@ -11,6 +11,7 @@ import CreateBotForm from "@/components/createBotForm";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import TelBot from '../../interfaces/ItelBot'
+import DefaultConfigModal from "@/utils/generateConfigModal";
 
 
 
@@ -20,17 +21,17 @@ export default function Mybots() {
     const [bots, setBots] = useState<TelBot[]>([])
     const [activeModal, setActiveModal] = useState<boolean>(false)
     useEffect(() => {
-        getMyBots().then((res) => { setBots(res.data.data) }).catch((err) => { alert('ui') })
-    }, [])
+        getMyBots().then((res) => { setBots(res.data.data) }).catch((err) => { DefaultConfigModal({ text: err.message, title: 'error', icon: 'error' }) })
+    }, [bots])
 
     const botsComponent = bots.map((bot) => {
 
         return <Link href={`./bot/${bot._id}`} className={styles.block_normal}>
-            <Image src={bot.profile || profile.src} 
-            width={150} 
-            height={180} 
-            priority={true}
-            alt="profile" />
+            <Image src={bot.profile || profile.src}
+                width={150}
+                height={180}
+                priority={true}
+                alt="profile" />
             <h3>{bot.name}</h3>
 
             <p>{bot.telegram_name}</p>
@@ -41,7 +42,7 @@ export default function Mybots() {
     })
     return <LayoutUser title="edit your profile">
         <>
-     
+
             <h1>my bots</h1>
             <TypingText text={bots.length > 0 ? `your valid bots: ${bots.length}.` : `no valid bot created`}
                 typingDelay={10}
@@ -51,8 +52,8 @@ export default function Mybots() {
                 Then, follow the prompts to name your bot and create a username.
                 Once your bot is created, the <Link href={"https://t.me/botfather"} target="_blank"> bot father</Link> will provide you with an API key that you can use to access the Telegram API and program your bot.</p>
             <div className={styles[activeModal ? "widowclos" : "invisible"]}>
-                <button className={styles.closbtn} onClick={() => { setActiveModal(false) }}>x</button>
-                <CreateBotForm />
+             
+                <CreateBotForm callback={() => { setActiveModal(false) }} />
             </div>
             <div className={styles.blocks}>
                 {botsComponent}
