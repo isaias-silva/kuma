@@ -30,7 +30,7 @@
     margin: 0;
     margin-bottom: 10px;
     border-radius: 0 0 0 100px;
-
+    box-shadow: 4px 4px 8px #000;
     box-sizing: border-box;
     padding-left: 40px;
     text-align: left;
@@ -183,11 +183,17 @@
 }
 
 .commandForm .blocks {
+    flex-direction: column;
     width: 100%;
 }
 
 .commandForm .blocks input {
-    width: 40%;
+    width: 50%;
+}
+.commandForm .blocks textarea{
+    width: 80%;
+    height: 140px;
+    resize: none;
 }
 
 .botForm .blocks .block {
@@ -311,7 +317,7 @@
     display: none;
 }
 
-.editForm button, .botForm button:not(.closbtn), .commandForm button:not(.closbtn) {
+.editForm button, .botForm button:not(.closbtn), .commandForm button:not(.closbtn,.btnPlus) {
     font-weight: bold;
     width: 150px;
     height: 50px;
@@ -362,8 +368,8 @@
 
     color: var(--font_color);
     border: none;
-    background-color: #00000041;
-    transition: 1s linear;
+    background-color: #00000000;
+    transition: 0.1s linear;
     border-radius: 10px;
 }
 
@@ -644,6 +650,7 @@ h1 .loadText {
     width: 50px;
     height: 50px;
     font-size: 24px;
+    margin:5px;
     border-radius: 10px;
     position: absolute;
     z-index: 10 !important;
@@ -655,6 +662,7 @@ h1 .loadText {
     left: 0;
 }
 
+
 .closbtn:hover {
     cursor: pointer;
     background-color: var(--component_color);
@@ -662,4 +670,11 @@ h1 .loadText {
 
 .modalAlert {
     display: none;
+}
+.btnPlus{
+    color: var(--font_color);
+    width: 40%;
+    border:1px dashed var(--font_color);
+    background-color: #00000006;
+    border-radius: 10px;
 }

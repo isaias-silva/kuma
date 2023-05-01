@@ -6,7 +6,7 @@ import { getBotForId } from "@/services/botInfo"
 import TelBot from "@/interfaces/ItelBot"
 import Image from "next/image"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faEdit, faPlus, faSave, faTrash } from "@fortawesome/free-solid-svg-icons"
+import { faEdit, faPlus, faSave, faTrash, faMessage } from "@fortawesome/free-solid-svg-icons"
 import loadImg from '@/public/load.gif'
 
 import { useForm } from "react-hook-form"
@@ -27,14 +27,17 @@ export default function Bot() {
   const [bot, setBot] = useState<TelBot>()
   const [botName, setBotName] = useState<string>()
 
-  const [editMode, setEditMode] = useState<editControl>()
+  const [editMode, setEditMode] = useState<editControl>({
+    editBotName: false,
+    createCommand: false,
+  })
 
 
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateBotData>();
 
 
   const onSubmitNewBotName = async (data: UpdateBotData) => {
-    const newValue = { editBotName: false, createCommand: false }
+    const newValue = { editBotName: false, createCommand: editMode.createCommand }
     if (bot?.apiKey) {
       if (data.name && data.name != bot.name) {
         setEditMode(newValue)
@@ -97,15 +100,16 @@ export default function Bot() {
 
   function activeEditMode(key: 'botName' | 'command', value: boolean) {
 
+
     const control: editControl = {
-      editBotName: editMode?.editBotName || false,
-      createCommand: editMode?.createCommand || false,
+      editBotName: editMode?.editBotName,
+      createCommand: editMode?.createCommand,
     }
 
-    if (key == 'botName') {
+    if (key === 'botName') {
       control.editBotName = value
     }
-    if (key == 'command') {
+    else if (key === 'command') {
       control.createCommand = value
 
     }
@@ -117,7 +121,7 @@ export default function Bot() {
       return
     }
     DefaultConfigModal({ text: ' ', title: ' ', icon: 'success' }).showLoading()
-    
+
     const response = await deleteTelBot(bot._id)
     if (response.status == 200) {
 
@@ -133,7 +137,7 @@ export default function Bot() {
       return
     }
     DefaultConfigModal({ text: ' ', title: ' ', icon: 'success' }).showLoading()
-    
+
     const response = await deleteCommandTelBot(bot.apiKey, command)
     if (response.status == 200) {
 
@@ -202,7 +206,12 @@ export default function Bot() {
                   <strong>messages:</strong> {bot?.messages.length}
 
                 </li>
-                <li> <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button></li>
+                <li>
+                  <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button>
+                  <button onClick={() => {
+                    route.push(`chat/?apiKey=${bot?.apiKey}`)
+                  }}><FontAwesomeIcon icon={faMessage} width={15} /> chat</button>
+                </li>
               </ul>
 
             </div>
@@ -214,8 +223,9 @@ export default function Bot() {
             <h2>commands:</h2>
 
             <ul>
+
               {
-                editMode?.createCommand ? <CreateCommandForm callback={() => { activeEditMode('command', false) }} apiKey={bot?.apiKey} /> : <li>
+                editMode?.createCommand.valueOf() == true ? <CreateCommandForm callback={() => { activeEditMode('command', false) }} apiKey={bot?.apiKey} /> : <li>
 
                   <div className={styles.createCommand}
                     onClick={() => { activeEditMode('command', true) }}

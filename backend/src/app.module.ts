@@ -9,6 +9,7 @@ import { AdmMiddleware } from './middlewares/check.adm';
 import { MulterModule } from '@nestjs/platform-express';
 import { UploadModule } from './controllers/upload/upload.module';
 import { BotModule } from './controllers/bot/bot.module';
+import { WsModule } from './controllers/websocket/websocket.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { BotModule } from './controllers/bot/bot.module';
     AuthModule,
     UploadModule,
     BotModule,
+    WsModule,
     MulterModule.register({
       dest: './uploads',
     }),

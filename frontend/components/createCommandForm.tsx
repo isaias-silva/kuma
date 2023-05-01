@@ -17,8 +17,8 @@ export default function CreateCommandForm({ callback, apiKey }: { callback?: Fun
         if (value.length < 5) {
             error = 'description is to short. please 5 digits or more.'
         }
-        if (value.length > 500) {
-            error = 'description is to long . please not more of 500 digits.'
+        if (value.length > 256) {
+            error = 'description is to long . please not more of 256 digits.'
         }
 
         return error
@@ -42,7 +42,7 @@ export default function CreateCommandForm({ callback, apiKey }: { callback?: Fun
 
         if (apiKey) {
             DefaultConfigModal({ text: ' ', title: ' ', icon: 'success' }).showLoading()
-           
+
             const response = await addBotCommand(apiKey, data.command, data.description)
             if (response.status == 200) {
                 DefaultConfigModal({ text: response.data.message, title: 'success', icon: 'success' }).fire()
@@ -64,9 +64,9 @@ export default function CreateCommandForm({ callback, apiKey }: { callback?: Fun
         <div className={styles.blocks}>
 
             <input type="text" placeholder="command name" {...register('command', { validate: validateCommand })} />
-            <input type="text" placeholder="description" {...register('description', { validate: validateDescription })} />
+            <textarea placeholder="description" {...register('description', { validate: validateDescription })} />
+           
         </div>
-
 
         <button>create</button>
         {errors.description ? <span className={styles.error}>{errors.description.message}</span> : null}

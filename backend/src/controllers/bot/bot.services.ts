@@ -5,11 +5,12 @@ import { Model } from "mongoose";
 import axios, { HttpStatusCode } from "axios";
 
 import * as TelegramBot from "node-telegram-bot-api";
+import { Bot } from "src/bot/Bot";
 
 
 @Injectable()
 export class BotServices {
-    botInstance?: TelegramBot;
+
     constructor(
         @InjectModel('Bot') private readonly botModel: Model<TelBot>,
 
@@ -28,6 +29,7 @@ export class BotServices {
             if (!bot) {
                 throw new HttpException('bot not found', HttpStatus.NOT_FOUND)
             }
+           
             return bot
         } catch (err) {
             throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
@@ -84,11 +86,11 @@ export class BotServices {
     }
     async deleteBotCommand(apiKey: string, command: string) {
         try {
-            this.botInstance = new TelegramBot(apiKey)
-            if (!this.botInstance) {
+            let botInstance = new TelegramBot(apiKey)
+            if (!botInstance) {
                 throw new HttpException("Error in telegram network. retry again.", HttpStatusCode.InternalServerError)
             }
-            const commands = await this.botInstance.getMyCommands()
+            const commands = await botInstance.getMyCommands()
 
 
             const [commandRm] = commands.filter((value) => value.command == command)
@@ -96,40 +98,41 @@ export class BotServices {
                 throw new HttpException("command don't exists.", HttpStatusCode.BadRequest)
             }
             commands.splice(commands.indexOf(commandRm), 1)
-            await this.botInstance.setMyCommands(commands)
+            await botInstance.setMyCommands(commands)
 
             const botDb = await this.botModel.findOne({ apiKey })
             if (!botDb) {
                 throw "error in updated bot info."
             }
             await this.updateBotInfo(botDb._id.toString())
+            botInstance = null
         }
 
         catch (err) {
-            throw new HttpException(err.message || "internal error in delete bot command", err.status || 501)
+            throw new HttpException(err.message || "internal error in delete bot command", err.status || HttpStatus.INTERNAL_SERVER_ERROR)
         }
     }
     async createBotCommand(apiKey: string, command: string, description: string) {
         try {
-            this.botInstance = new TelegramBot(apiKey)
-            if (!this.botInstance) {
+            let botInstance = new TelegramBot(apiKey)
+            if (!botInstance) {
                 throw new HttpException("Error in telegram network. retry again.", HttpStatusCode.InternalServerError)
             }
-            const commands = await this.botInstance.getMyCommands()
+            const commands = await botInstance.getMyCommands()
             const [commandRm] = commands.filter((value) => value.command == command)
             if (commandRm) {
                 throw new HttpException("command name has exists.", HttpStatusCode.BadRequest)
             }
 
             commands.push({ command: command, description })
-            await this.botInstance.setMyCommands(commands)
+            await botInstance.setMyCommands(commands)
 
             const botDb = await this.botModel.findOne({ apiKey })
             if (!botDb) {
                 throw "error in updated bot info."
             }
             await this.updateBotInfo(botDb._id.toString())
-
+            botInstance = null
         }
         catch (err) {
             throw new HttpException(err.message || "internal error in delete bot command", err.status || 501)
@@ -147,13 +150,13 @@ export class BotServices {
     async generateBotInfo(bot: TelBot, ownerId: string) {
         try {
 
-            this.botInstance = new TelegramBot(bot.apiKey, { polling: false });
+            let botInstance = new TelegramBot(bot.apiKey, { polling: false });
 
-            const info = await this.botInstance.getMe()
-            const comands = await this.botInstance.getMyCommands()
-            const profiles = (await this.botInstance.getUserProfilePhotos(info.id))
+            const info = await botInstance.getMe()
+            const comands = await botInstance.getMyCommands()
+            const profiles = (await botInstance.getUserProfilePhotos(info.id))
             const file_id = profiles.photos.length > 0 ? profiles.photos[0][0].file_id : null
-            const profile = file_id ? await this.botInstance.getFileLink(file_id) : null
+            const profile = file_id ? await botInstance.getFileLink(file_id) : null
 
 
 
@@ -171,6 +174,7 @@ export class BotServices {
                 comands
             }
 
+            botInstance = null
 
             return obj
         } catch (err) {
