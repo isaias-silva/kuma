@@ -4,7 +4,8 @@ import { WsService } from './websocket.services';
 
 @Module({
   providers: [WsGateway, WsService],
-  exports: [WsService]
+  exports: [WsService],
+
 
 })
 export class WsModule { }

@@ -104,7 +104,34 @@
     background-color: #0000005d;
 
 }
+.chatBarr li{
+    position: relative;
+    display: flex;
+    box-sizing: border-box;
+   
+    align-items: center;
 
+    border-radius: 10px;
+    background-color: #00000033;
+}
+.chatBarr li img{
+    margin-right: 10px;
+    border-radius: 100%;
+}
+.chatBarr li span{
+    display: block;
+    text-align: left;
+}
+.nameChat{
+    margin-top: 10px;
+    font-size: 16px;
+
+}
+.lastmessage{
+    font-weight: normal;
+   font-size: 14px;
+
+}
 .profile {
     width: 100px;
     height: 100px;
@@ -677,4 +704,18 @@ h1 .loadText {
     border:1px dashed var(--font_color);
     background-color: #00000006;
     border-radius: 10px;
+}
+.messageCount{
+    background-color: var(--input_color);
+    color:var(--font_color);
+    border-radius: 100%;
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    right: 0;
+    margin:4px;
 }
