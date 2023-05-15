@@ -1,12 +1,6 @@
 import * as TelegramBot from "node-telegram-bot-api";
 import { Socket } from "socket.io";
-
-type MessagesTel = {
-    name: string,
-    messages: string[]
-    profile: string,
-    id: number
-}
+import extract from "./messageExtract";
 
 export class Bot {
     socket: TelegramBot
@@ -25,28 +19,20 @@ export class Bot {
 
             this.socket = new TelegramBot(this.apiKey, { polling: true })
             this.socket.on('message', async (msg) => {
-                console.log(msg)
-                const { text, chat } = msg
-                const dataprofile = (await this.socket.getUserProfilePhotos(chat.id))?.photos[0]
-                const profile = await this.socket.getFileLink(dataprofile[0].file_id)
-                const formatMessage = {
-                    name: chat.username,
-                    id: chat.id,
-                    messages: [text],
-                    profile
 
-                }
-                console.log(formatMessage)
+                const formatMessage = await extract(this.socket, msg)
+
 
                 const [existMessage] = this.messages.filter(value => value.id == formatMessage.id)
                 if (existMessage) {
+                    console.log('message exist')
                     const indexExistMessage = this.messages.indexOf(existMessage)
-                    this.messages[indexExistMessage].messages.push(text)
+                    this.messages[indexExistMessage].messages.push(existMessage.messages[0])
                 } else {
                     this.messages.push(formatMessage)
 
                 }
-
+                console.log(this.messages)
                 this.websocket.emit("telegram_message", this.messages)
 
             })

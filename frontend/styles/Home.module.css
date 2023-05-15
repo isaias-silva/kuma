@@ -5,7 +5,7 @@
     position: relative;
 }
 
-.section {
+.section,.sectionChat {
     position: absolute;
     right: 0;
     width: 85%;
@@ -23,7 +23,13 @@
 
 
 }
-
+.sectionChat{
+    width: 75%;
+    background-color: #00000029;
+}
+.sectionChat h1{
+    text-align: center;
+}
 .section h1 {
 
     background-color: var(--component_color);
@@ -46,7 +52,7 @@
     margin-bottom: 10px;
 }
 
-.aside {
+.aside, .asideChat {
     width: 15%;
     top: 0;
     position: fixed;
@@ -60,7 +66,11 @@
     padding: 0;
 }
 
-.aside ul {
+.asideChat {
+    width: 25%;
+}
+
+.aside ul, .asideChat ul {
 
     width: 100%;
 
@@ -70,7 +80,7 @@
 
 
 
-.aside li {
+.aside li, .asideChat li {
     display: flex;
     width: 100%;
     height: 60px;
@@ -85,7 +95,7 @@
     font-size: 14px;
 }
 
-.aside li a {
+.aside li a, .asideChat li a {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -99,39 +109,51 @@
     margin-right: 10px;
 }
 
-.aside li:hover, .aside button:hover {
+.aside li:hover,
+.aside button:hover,
+.asideChat li:hover,
+
+.asideChat button:hover {
     cursor: pointer;
     background-color: #0000005d;
 
 }
-.chatBarr li{
+.asideChat li{
+    margin-bottom: 4px;
+}
+.chatBarr li {
     position: relative;
     display: flex;
     box-sizing: border-box;
-   
+
     align-items: center;
 
     border-radius: 10px;
     background-color: #00000033;
 }
-.chatBarr li img{
+
+.chatBarr li img {
     margin-right: 10px;
     border-radius: 100%;
 }
-.chatBarr li span{
+
+.chatBarr li span {
     display: block;
     text-align: left;
 }
-.nameChat{
+
+.nameChat {
     margin-top: 10px;
     font-size: 16px;
 
 }
-.lastmessage{
+
+.lastmessage {
     font-weight: normal;
-   font-size: 14px;
+    font-size: 14px;
 
 }
+
 .profile {
     width: 100px;
     height: 100px;
@@ -217,7 +239,8 @@
 .commandForm .blocks input {
     width: 50%;
 }
-.commandForm .blocks textarea{
+
+.commandForm .blocks textarea {
     width: 80%;
     height: 140px;
     resize: none;
@@ -344,7 +367,7 @@
     display: none;
 }
 
-.editForm button, .botForm button:not(.closbtn), .commandForm button:not(.closbtn,.btnPlus) {
+.editForm button, .botForm button:not(.closbtn), .commandForm button:not(.closbtn, .btnPlus) {
     font-weight: bold;
     width: 150px;
     height: 50px;
@@ -677,7 +700,7 @@ h1 .loadText {
     width: 50px;
     height: 50px;
     font-size: 24px;
-    margin:5px;
+    margin: 5px;
     border-radius: 10px;
     position: absolute;
     z-index: 10 !important;
@@ -698,16 +721,18 @@ h1 .loadText {
 .modalAlert {
     display: none;
 }
-.btnPlus{
+
+.btnPlus {
     color: var(--font_color);
     width: 40%;
-    border:1px dashed var(--font_color);
+    border: 1px dashed var(--font_color);
     background-color: #00000006;
     border-radius: 10px;
 }
-.messageCount{
+
+.messageCount {
     background-color: var(--input_color);
-    color:var(--font_color);
+    color: var(--font_color);
     border-radius: 100%;
     position: absolute;
     width: 25px;
@@ -717,5 +742,5 @@ h1 .loadText {
     justify-content: center;
     align-items: center;
     right: 0;
-    margin:4px;
+    margin: 4px;
 }

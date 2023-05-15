@@ -21,9 +21,21 @@ import Cookies from 'js-cookie';
 
 type MessagesTel = {
     name: string,
-    messages:string[]
+    messages: {
+        type: string,
+        text?: string,
+        urlMedia?: string,
+    }[]
     profile: string,
-    id:string
+    id: number
+}
+function generatePreview(message: { type: string, text?: string, urlMedia?: string }) {
+    const { type, text, urlMedia } = message
+    if(text){
+
+        const format = text.length >= 50 ? text.substring(0, 50) + '...' : text
+        return format
+    }
 }
 export default function AsideMessages({ messages }: { messages: MessagesTel[] }) {
     const route = useRouter()
@@ -65,7 +77,7 @@ export default function AsideMessages({ messages }: { messages: MessagesTel[] })
 
     }
     return <>
-        <div className={styles.aside}>
+        <div className={styles.asideChat}>
             <button onClick={setTheme} className={styles.controlTheme}><FontAwesomeIcon icon={isNoturne ? faSun : faMoon}
                 width={25}
                 height={25}
@@ -83,12 +95,12 @@ export default function AsideMessages({ messages }: { messages: MessagesTel[] })
 
             </div>
             <ul className={styles.chatBarr}>
-                {messages.map((value,key) =>
+                {messages.map((value, key) =>
                     <li key={key}>
-                        <Image src={value.profile||genericProfile} width={50} height={50} alt="contanct" />
+                        <Image src={value.profile || genericProfile} width={50} height={50} alt="contanct" />
                         <div>
                             <span className={styles.nameChat}>{value.name}</span>
-                            <p className={styles.lastmessage}>{value.messages[value.messages.length-1].substring(0,10)+'...'}</p>
+                            <p className={styles.lastmessage}>{generatePreview(value.messages[value.messages.length - 1])}</p>
 
                         </div>
                         <div className={styles.messageCount}><span>{value.messages.length}</span></div>

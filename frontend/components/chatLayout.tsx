@@ -3,7 +3,8 @@ import Head from 'next/head'
 import AsideMessages from './AsideMessages'
 import { useSocket } from '@/hooks/useSocket'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { cloneElement, useEffect, useState } from 'react'
+import React from 'react'
 export default function LayoutChat({ children, title }: { title: string, children: JSX.Element }) {
     const io = useSocket('localhost:8081')
     const route = useRouter()
@@ -11,14 +12,16 @@ export default function LayoutChat({ children, title }: { title: string, childre
 
     type MessagesTelWs = {
         name: string,
-        messages:string[]
+        messages: string[]
         profile: string,
-        id:string
+        id: string
     }
 
     const [messages, setMessage] = useState<MessagesTelWs[]>([])
 
-
+    const childrenWithProps = React.Children.map(children, (child) =>
+        cloneElement(child, { io, messages })
+    );
     useEffect(() => {
         if (typeof route.query.apiKey == 'string') {
 
@@ -26,7 +29,7 @@ export default function LayoutChat({ children, title }: { title: string, childre
                 io.on('connect', () => {
                     io.emit('bot_start', { apiKey: route.query.apiKey })
                     io.on("telegram_message", (messagesWs) => {
-                      
+
                         setMessage(messagesWs)
                     })
                 })
@@ -35,7 +38,7 @@ export default function LayoutChat({ children, title }: { title: string, childre
         }
 
 
-    }, [io,route.query])
+    }, [io, route.query])
 
     return <>
         <Head>
@@ -47,9 +50,9 @@ export default function LayoutChat({ children, title }: { title: string, childre
 
         </Head>
         <div className={styles.content}>
-            <AsideMessages messages={messages}/>
-            <div className={styles.section}>
-                {children}
+            <AsideMessages messages={messages} />
+            <div className={styles.sectionChat}>
+                {childrenWithProps}
             </div>
         </div>
     </>
