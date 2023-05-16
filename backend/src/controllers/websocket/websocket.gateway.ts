@@ -35,7 +35,8 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
 
         client.on('bot_start', async (data: { apiKey: string }) => {
                 if (!data.apiKey) {
-                    console.log('apikey not exists')
+                    console.log('bot not exists')
+                   client.emit('error','bot not exists')
                     return
             }
             const [existsBot] = this.bots.filter((value) => value.apiKey == data.apiKey)

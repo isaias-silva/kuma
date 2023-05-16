@@ -94,6 +94,10 @@ export default function AsideMessages({ messages }: { messages: MessagesTel[] })
 
 
             </div>
+            <div className={styles.botProfileChat}>
+                <Image width={60} src={genericProfile} alt=""/>
+                <span>bot name</span>
+            </div>
             <ul className={styles.chatBarr}>
                 {messages.map((value, key) =>
                     <li key={key}>
