@@ -9,7 +9,8 @@ import {
     faCrow,
     faDiamond,
     faBiking,
-    faChessKing
+    faChessKing,
+    faArrowLeft
 
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -18,6 +19,7 @@ import Iuser from '@/interfaces/Iuser';
 import getUserInfo from '@/services/userInfo';
 import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
+import TelBot from '@/interfaces/ItelBot';
 
 type MessagesTel = {
     name: string,
@@ -31,13 +33,13 @@ type MessagesTel = {
 }
 function generatePreview(message: { type: string, text?: string, urlMedia?: string }) {
     const { type, text, urlMedia } = message
-    if(text){
+    if (text) {
 
-        const format = text.length >= 50 ? text.substring(0, 50) + '...' : text
+        const format = text.length >= 50 ? text.substring(0, 20) + '...' : text
         return format
     }
 }
-export default function AsideMessages({ messages }: { messages: MessagesTel[] }) {
+export default function AsideMessages({ messages, botInfo }: { botInfo?: TelBot, messages: MessagesTel[] }) {
     const route = useRouter()
     const [userInfo, setUserInfo] = useState<Iuser>()
     const [isNoturne, setNoturne] = useState<boolean>()
@@ -83,21 +85,26 @@ export default function AsideMessages({ messages }: { messages: MessagesTel[] })
                 height={25}
 
             /></button>
-            <div className={styles.userinfo}>
+            <Link href={`/user/bot/${botInfo?._id}`} className={styles.btnLeft}>
+                <FontAwesomeIcon icon={faArrowLeft} width={25} height={25} />
+            </Link>
+            <Link href={'/user'}>           
+             <div className={styles.userinfo}>
                 <div className={styles.profile}>
                     <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                 </div>
-                <br />
-                {userInfo?.days_use ? <span>{userInfo.adm ? <><FontAwesomeIcon icon={faChessKing} width={16} height={16} /><strong>adm</strong><FontAwesomeIcon icon={faChessKing} width={16} height={16} /></> : `Days of use: ${userInfo.days_use}`}</span> : <span className={styles.loadText}></span>}
-
-                <h3>{userInfo?.name || <span className={styles.loadText}></span>} </h3>
-
-
             </div>
+            </Link>
+
             <div className={styles.botProfileChat}>
-                <Image width={60} src={genericProfile} alt=""/>
-                <span>bot name</span>
+                <Image
+                    src={botInfo?.profile || genericProfile}
+                    width={60}
+                    height={60}
+                    alt="bot profile profile" />
+                {botInfo ? <span>{botInfo.name} </span> : <span className={styles.loadText}></span>}
             </div>
+
             <ul className={styles.chatBarr}>
                 {messages.map((value, key) =>
                     <li key={key}>

@@ -43,11 +43,11 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
             if (existsBot) {
                 console.log('change bot socket')
                 existsBot.websocket = client
-                
+                //a
             } else {
                 console.log('create a new bot')
                 const botInstance = new Bot(data.apiKey, client)
-                await botInstance.start()
+               await botInstance.start()
                 this.bots.push(botInstance)
             }
         })

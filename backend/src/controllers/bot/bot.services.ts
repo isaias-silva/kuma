@@ -25,11 +25,12 @@ export class BotServices {
 
         try {
             const bot = await this.botModel.findOne({ ownerId, _id: botId })
+            await this.updateBotInfo(bot.id)
 
             if (!bot) {
                 throw new HttpException('bot not found', HttpStatus.NOT_FOUND)
             }
-           
+
             return bot
         } catch (err) {
             throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
@@ -68,6 +69,7 @@ export class BotServices {
         }
     }
     async updateBotNames(ownerId: string, updateBotNames: { name: string, apiKey: string }) {
+       
         try {
             const { name, apiKey } = updateBotNames
 
@@ -148,9 +150,9 @@ export class BotServices {
         await this.botModel.updateOne({ _id: bot._id }, updatedBot)
     }
     async generateBotInfo(bot: TelBot, ownerId: string) {
+        let botInstance = new TelegramBot(bot.apiKey, { polling: false });
         try {
 
-            let botInstance = new TelegramBot(bot.apiKey, { polling: false });
 
             const info = await botInstance.getMe()
             const comands = await botInstance.getMyCommands()
@@ -178,8 +180,11 @@ export class BotServices {
 
             return obj
         } catch (err) {
-            console.log(err)
+
+
             throw new HttpException(err.message || "internal error in obtain botinfo", err.status || 501)
+        } finally {
+            botInstance = null
         }
 
 

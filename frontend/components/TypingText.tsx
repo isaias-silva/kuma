@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import ReactDOMServer from 'react-dom/server';
+import styles from '@/styles/Home.module.css'
+
 
 export default function TypingText({ text, typingDelay, link }: { text: string, typingDelay: number, link?: string | null }) {
 
@@ -23,5 +24,5 @@ export default function TypingText({ text, typingDelay, link }: { text: string, 
     }, [displayText, text, typingDelay]);
 
 
-    return link == null ? <p> {displayText}</p> : <p>{displayText} <Link href={link}>click here </Link></p>
+    return link == null ? <p className={styles.textCenter}> {displayText}</p> : <p>{displayText} <Link href={link}>click here </Link></p>
 };

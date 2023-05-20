@@ -21,14 +21,16 @@ export class Bot {
             this.socket.on('message', async (msg) => {
 
                 const formatMessage = await extract(this.socket, msg)
-
+                if (!formatMessage) {
+                    return
+                }
                 const [existMessage] = this.messages.filter(value => value.id == formatMessage.id)
                 if (existMessage) {
-        
+
                     const indexExistMessage = this.messages.indexOf(existMessage)
-                    
+
                     this.messages[indexExistMessage].messages.push(formatMessage.messages[0])
-                 
+
                 } else {
                     this.messages.push(formatMessage)
 
@@ -39,7 +41,7 @@ export class Bot {
             })
 
         } catch (err) {
-            console.log('[!] error: ' + err)
+            return
         }
     }
     kill = async () => {

@@ -15,6 +15,7 @@ import { updateBotName } from "@/services/updateTelegramBotInfo"
 import DefaultConfigModal from "@/utils/generateConfigModal"
 import { deleteCommandTelBot, deleteTelBot } from "@/services/deleteBot"
 import CreateCommandForm from "@/components/createCommandForm"
+import TypingText from "@/components/TypingText"
 type editControl = {
   editBotName: boolean,
   createCommand: boolean
@@ -25,6 +26,7 @@ type UpdateBotData = {
 export default function Bot() {
   const route = useRouter()
   const [bot, setBot] = useState<TelBot>()
+  const [deleting, setDeleting] = useState<boolean>(false)
   const [botName, setBotName] = useState<string>()
 
   const [editMode, setEditMode] = useState<editControl>({
@@ -35,41 +37,6 @@ export default function Bot() {
 
   const { register, handleSubmit, formState: { errors } } = useForm<UpdateBotData>();
 
-
-  const onSubmitNewBotName = async (data: UpdateBotData) => {
-    const newValue = { editBotName: false, createCommand: editMode.createCommand }
-    if (bot?.apiKey) {
-      if (data.name && data.name != bot.name) {
-        setEditMode(newValue)
-        const response = await updateBotName(data.name, bot?.apiKey)
-
-        if (response.status == 200) {
-
-          DefaultConfigModal({ text: response.data.message, title: 'sucess', icon: 'success' }).fire()
-
-        } else {
-          DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
-
-        }
-      } else {
-
-        setEditMode(newValue)
-      }
-
-
-    }
-  }
-
-  const validateBotName = (botName: string) => {
-    let error;
-    if (botName && botName?.length <= 3) {
-      error = "bot name is short, please use 4 digits or more."
-    }
-    if (botName && botName?.length >= 16) {
-      error = "bot name is long, the max length is 16 digits."
-    }
-    return error
-  }
 
 
 
@@ -82,8 +49,12 @@ export default function Bot() {
 
           setBot(res.data.data)
 
-        } else {
-          route.push('/404')
+        } else if (!deleting) {
+
+          DefaultConfigModal({ text: 'bot not found', title: 'error', icon: 'error' }).fire().then((click) => {
+
+            route.push('/user/mybots')
+          })
         }
 
       })
@@ -120,12 +91,16 @@ export default function Bot() {
     if (!bot) {
       return
     }
+    setDeleting(true)
     DefaultConfigModal({ text: ' ', title: ' ', icon: 'success' }).showLoading()
 
     const response = await deleteTelBot(bot._id)
-    if (response.status == 200) {
 
-      return route.push('/user/mybots')
+    if (response.status == 200) {
+      DefaultConfigModal({ text: response.data.message, title: 'success', icon: 'success' }).fire().then((click) => {
+
+        route.push('/user/mybots')
+      })
 
     } else {
       DefaultConfigModal({ text: response.data.message, title: response.status, icon: 'error' }).fire()
@@ -173,19 +148,7 @@ export default function Bot() {
             <div className={styles.botInfo}>
               <ul>
                 <li>
-                  <strong>bot name: </strong> {editMode?.editBotName ?
-                    <input type="text" value={botName}
-                      onInput={changeBotName}
-                      {...register("name", { validate: validateBotName })} /> : botName || bot?.name || <span className={styles.loadText}></span>}
-
-
-                  <button onClick={editMode?.editBotName ? handleSubmit(onSubmitNewBotName) : () => {
-
-                    activeEditMode('botName', !editMode?.editBotName)
-                  }}>
-
-                    <FontAwesomeIcon icon={editMode?.editBotName ? faSave : faEdit} width={16} height={16} />
-                  </button>
+                  <strong>bot name: </strong>  {bot?.name || <span className={styles.loadText}></span>}
                 </li>
                 <li>
                   <strong>telegram name: </strong> {bot?.telegram_name || <span className={styles.loadText}></span>}
@@ -207,9 +170,11 @@ export default function Bot() {
 
                 </li>
                 <li>
+                </li>
+                <li>
                   <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button>
                   <button onClick={() => {
-                    route.push(`chat/?apiKey=${bot?.apiKey}`)
+                    route.push(`chat/?apiKey=${bot?.apiKey}&id=${bot?._id}`)
                   }}><FontAwesomeIcon icon={faMessage} width={15} /> chat</button>
                 </li>
               </ul>
@@ -218,6 +183,7 @@ export default function Bot() {
           </div>
           {errors.name ? <span className={styles.error}>{errors.name.message}</span> : null}
 
+          <TypingText text="We'd like to clarify that even if you delete the bot here, it will still exist on Telegram. Our bot is available on the Telegram platform as well, so you can continue interacting with it there. Simply search for our bot by name or identifier in the Telegram search bar to start a conversation and access all its features. We're committed to providing ongoing support across different platforms to meet your needs. Thank you for your understanding." typingDelay={5} />
 
           <div className={styles.comands}>
             <h2>commands:</h2>
