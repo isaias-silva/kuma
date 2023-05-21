@@ -1,11 +1,13 @@
 import * as TelegramBot from "node-telegram-bot-api";
 import { Socket } from "socket.io";
 import extract from "./messageExtract";
+import { BotServices } from "src/controllers/bot/bot.services";
 
 export class Bot {
     socket: TelegramBot
     apiKey: string
     websocket: Socket
+
     private messages: MessagesTel[] = []
     constructor(apiKey: string, websocket: Socket) {
         this.apiKey = apiKey
@@ -36,7 +38,7 @@ export class Bot {
 
                 }
                 console.log(this.messages)
-                this.websocket.emit("telegram_message", this.messages)
+                await this.getMessages()
 
             })
 
@@ -44,8 +46,16 @@ export class Bot {
             return
         }
     }
+    getMessages = async () => {
+        if (!this.socket || !this.websocket) {
+            return
+        }
+        this.websocket.emit("telegram_message", this.messages)
+    }
     kill = async () => {
+        console.log('killing bot')
         await this.socket.stopPolling()
-        await this.socket.close()
+
+        this.socket = null
     }
 }

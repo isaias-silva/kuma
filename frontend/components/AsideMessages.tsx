@@ -10,7 +10,8 @@ import {
     faDiamond,
     faBiking,
     faChessKing,
-    faArrowLeft
+    faTentArrowTurnLeft,
+    faRobot
 
 } from '@fortawesome/free-solid-svg-icons';
 import Image from 'next/image';
@@ -21,29 +22,27 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 import TelBot from '@/interfaces/ItelBot';
 
-type MessagesTel = {
-    name: string,
-    messages: {
-        type: string,
-        text?: string,
-        urlMedia?: string,
-    }[]
-    profile: string,
-    id: number
-}
+
 function generatePreview(message: { type: string, text?: string, urlMedia?: string }) {
     const { type, text, urlMedia } = message
-    if (text) {
+   if(text){
 
-        const format = text.length >= 50 ? text.substring(0, 20) + '...' : text
-        return format
-    }
+       if (type == 'text') {
+   
+           const format = text.length >= 50 ? text.substring(0, 20) + '...' : text
+           return format
+       } else {
+           return `[${type}] ${ text.length >= 50 ? text.substring(0, 8) + '...' : text}`
+       }
+   }else{
+    return `[${type}]`
+   }
 }
 export default function AsideMessages({ messages, botInfo }: { botInfo?: TelBot, messages: MessagesTel[] }) {
     const route = useRouter()
     const [userInfo, setUserInfo] = useState<Iuser>()
     const [isNoturne, setNoturne] = useState<boolean>()
-
+    const [urlReturn, setUrlReturn] = useState<string>('/user/mybots')
     useEffect(() => {
 
         //is noturne
@@ -86,14 +85,14 @@ export default function AsideMessages({ messages, botInfo }: { botInfo?: TelBot,
 
             /></button>
             <Link href={`/user/bot/${botInfo?._id}`} className={styles.btnLeft}>
-                <FontAwesomeIcon icon={faArrowLeft} width={25} height={25} />
+                <FontAwesomeIcon icon={faRobot} width={25} height={25} />
             </Link>
-            <Link href={'/user'}>           
-             <div className={styles.userinfo}>
-                <div className={styles.profile}>
-                    <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
+            <Link href={'/user'}>
+                <div className={styles.userinfo}>
+                    <div className={styles.profile}>
+                        <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
+                    </div>
                 </div>
-            </div>
             </Link>
 
             <div className={styles.botProfileChat}>
@@ -108,10 +107,31 @@ export default function AsideMessages({ messages, botInfo }: { botInfo?: TelBot,
             <ul className={styles.chatBarr}>
                 {messages.map((value, key) =>
                     <li key={key}>
-                        <Image src={value.profile || genericProfile} width={50} height={50} alt="contanct" />
+                        {value.isGroup ?
+                            <div>
+                                <Image className={styles.groupProfile}
+                                    src={value.profile || genericProfile}
+                                    width={50}
+                                    height={50}
+                                    alt="group" />
+
+                                <Image className={styles.memberGroup}
+                                    src={value.messages[value.messages.length - 1].groupChatInfo?.profile
+                                        || genericProfile}
+                                    width={30}
+                                    height={30}
+                                    alt="contanct" />
+
+                            </div>
+                            :
+                            <Image src={value.profile || genericProfile} width={50} height={50} alt="contanct" />
+                        }
+
                         <div>
                             <span className={styles.nameChat}>{value.name}</span>
-                            <p className={styles.lastmessage}>{generatePreview(value.messages[value.messages.length - 1])}</p>
+                            <p className={styles.lastmessage}>
+                                {value.isGroup ? <b>{value.messages[value.messages.length - 1].groupChatInfo?.name}: </b> : ''}
+                                {generatePreview(value.messages[value.messages.length - 1])}</p>
 
                         </div>
                         <div className={styles.messageCount}><span>{value.messages.length}</span></div>

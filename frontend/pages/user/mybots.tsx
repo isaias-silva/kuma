@@ -35,7 +35,7 @@ export default function Mybots() {
             <h3>{bot.name}</h3>
 
             <p>{bot.telegram_name}</p>
-            <p>messages:{bot.messages.length} </p>
+            <p>commands :{bot.comands.length} </p>
 
         </Link>
 
@@ -52,7 +52,7 @@ export default function Mybots() {
                 Then, follow the prompts to name your bot and create a username.
                 Once your bot is created, the <Link href={"https://t.me/botfather"} target="_blank"> bot father</Link> will provide you with an API key that you can use to access the Telegram API and program your bot.</p>
             <div className={styles[activeModal ? "widowclos" : "invisible"]}>
-             
+
                 <CreateBotForm callback={() => { setActiveModal(false) }} />
             </div>
             <div className={styles.blocks}>

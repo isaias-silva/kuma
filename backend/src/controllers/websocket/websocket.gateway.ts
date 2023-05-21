@@ -22,34 +22,34 @@ export class WsGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayD
 
         console.log('socket starting...')
     }
-    handleDisconnect(client: Socket) {
+    async handleDisconnect(client: Socket) {
         console.log(`socket disconnect [${client.id}]...`)
         const [botRemove] = this.bots.filter((value) => value.websocket.id == client.id)
-        if(botRemove){
-            console.log(`bot ${botRemove.websocket.id} removed`)
-            this.bots.slice(this.bots.indexOf(botRemove),1)
+        if (botRemove) {
+            console.log(`bot ${botRemove.websocket.id} disconnect`)
         }
     }
     handleConnection(client: Socket, ...args: any[]) {
         console.log(`socket connect [${client.id}]...`)
 
         client.on('bot_start', async (data: { apiKey: string }) => {
-                if (!data.apiKey) {
-                    console.log('bot not exists')
-                   client.emit('error','bot not exists')
-                    return
+            if (!data.apiKey) {
+                console.log('bot not exists')
+                client.emit('error', 'bot not exists')
+                return
             }
             const [existsBot] = this.bots.filter((value) => value.apiKey == data.apiKey)
             if (existsBot) {
                 console.log('change bot socket')
                 existsBot.websocket = client
-                //a
+                await existsBot.getMessages()
             } else {
                 console.log('create a new bot')
                 const botInstance = new Bot(data.apiKey, client)
-               await botInstance.start()
+                await botInstance.start()
                 this.bots.push(botInstance)
             }
+
         })
 
     }

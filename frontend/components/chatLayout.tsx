@@ -21,22 +21,28 @@ export default function LayoutChat({ children, title }: { title: string, childre
     );
     useEffect(() => {
         if (typeof route.query.apiKey == 'string') {
-           
+
             if (io) {
-
-                io.emit('bot_start', { apiKey: route.query.apiKey })
-
+                io.on("connect", () => {
+                  
+                    route.reload()   
+                })
+                
+                io.on("close",()=>{
+                    route.push("/user/mybots")
+                })        
                 io.on("telegram_message", (messagesWs) => {
-
+                    
                     setMessage(messagesWs)
                 })
-
+                
+                io.emit('bot_start', { apiKey: route.query.apiKey })
             }
 
         }
 
         if (typeof route.query.id == 'string') {
-       
+
             getBotForId(route.query.id).then((res) => {
                 if (res.status == '200') {
 

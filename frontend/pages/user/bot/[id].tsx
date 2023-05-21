@@ -165,17 +165,14 @@ export default function Bot() {
                   <strong>telegram id: </strong> {bot?.bot_id || <span className={styles.loadText}></span>}
 
                 </li>
-                <li>
-                  <strong>messages:</strong> {bot?.messages.length}
 
-                </li>
-                <li>
-                </li>
                 <li>
                   <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button>
                   <button onClick={() => {
                     route.push(`chat/?apiKey=${bot?.apiKey}&id=${bot?._id}`)
-                  }}><FontAwesomeIcon icon={faMessage} width={15} /> chat</button>
+                  }}><FontAwesomeIcon icon={faMessage} width={15} /> chat
+                    {bot?.messages && bot.messages.length > 0 ?<span className={styles.countMsgBtn}>{bot.messages.length}</span>:''}
+                  </button>
                 </li>
               </ul>
 

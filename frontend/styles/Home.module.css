@@ -147,6 +147,19 @@
     text-align: left;
 }
 
+.chatBarr .groupProfile {
+    border-radius: 10px;
+    position: relative;
+}
+
+.chatBarr .memberGroup {
+    position: absolute;
+    left: 20px;
+    bottom: 0;
+    box-sizing: border-box;
+    border: 2px solid var(--main_color)
+}
+
 .nameChat {
     margin-top: 10px;
     font-size: 16px;
@@ -189,6 +202,7 @@
 
 }
 
+
 .botProfileChat img {
     border-radius: 100%;
     border: 3px solid var(--main_color);
@@ -213,11 +227,13 @@
     margin-left: 10px;
 }
 
-.profile img {
+.profile img>.profile img.groupProfile {
     width: 100%;
     height: auto;
     transition: linear 0.3s;
 }
+
+
 
 /*login*/
 .login {
@@ -804,4 +820,22 @@ h1 .loadText {
     width: 80%;
     text-align: center;
     margin: auto;
+}
+.countMsgBtn {
+    background-color: #ff0000;
+    font-weight: bold;
+    border-radius: 100%;
+
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    padding-left: 6px;
+    padding-right: 6px;
+    padding-bottom: 2px;
+    padding-top: 2px;
+}
+
+button>.countMsgBtn {
+    background-color: red;
+    position: relative;
 }

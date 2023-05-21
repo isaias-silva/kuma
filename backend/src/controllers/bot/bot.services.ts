@@ -6,6 +6,7 @@ import axios, { HttpStatusCode } from "axios";
 
 import * as TelegramBot from "node-telegram-bot-api";
 import { Bot } from "src/bot/Bot";
+import extract from "src/bot/messageExtract";
 
 
 @Injectable()
@@ -22,18 +23,25 @@ export class BotServices {
         return bots
     }
     async getBot(ownerId: string, botId: string) {
-
+        let bot
         try {
-            const bot = await this.botModel.findOne({ ownerId, _id: botId })
-            await this.updateBotInfo(bot.id)
+            bot = await this.botModel.findOne({ ownerId, _id: botId })
+
 
             if (!bot) {
                 throw new HttpException('bot not found', HttpStatus.NOT_FOUND)
             }
 
-            return bot
         } catch (err) {
             throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        try {
+            await this.updateBotInfo(bot.id)
+        } catch (err) {
+            console.log(err)
+        } finally {
+            return bot
+
         }
     }
     async createBot(ownerId: string, bot: TelBot) {
@@ -69,7 +77,7 @@ export class BotServices {
         }
     }
     async updateBotNames(ownerId: string, updateBotNames: { name: string, apiKey: string }) {
-       
+
         try {
             const { name, apiKey } = updateBotNames
 
@@ -145,23 +153,20 @@ export class BotServices {
         const bot = await this.botModel.findById(id)
         if (!bot) {
             return
-        }
+        }//
         const updatedBot = await this.generateBotInfo(bot, bot.ownerId)
         await this.botModel.updateOne({ _id: bot._id }, updatedBot)
     }
     async generateBotInfo(bot: TelBot, ownerId: string) {
-        let botInstance = new TelegramBot(bot.apiKey, { polling: false });
+        let botInstance
         try {
-
+            botInstance = new TelegramBot(bot.apiKey, { polling: false });
 
             const info = await botInstance.getMe()
             const comands = await botInstance.getMyCommands()
             const profiles = (await botInstance.getUserProfilePhotos(info.id))
             const file_id = profiles.photos.length > 0 ? profiles.photos[0][0].file_id : null
             const profile = file_id ? await botInstance.getFileLink(file_id) : null
-
-
-
 
 
             const obj: TelBot = {
@@ -184,7 +189,13 @@ export class BotServices {
 
             throw new HttpException(err.message || "internal error in obtain botinfo", err.status || 501)
         } finally {
-            botInstance = null
+            if (botInstance) {
+
+                await botInstance.stopPolling()
+                await botInstance.close()
+                botInstance = null
+            }
+
         }
 
 

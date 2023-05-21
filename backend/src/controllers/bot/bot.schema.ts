@@ -2,7 +2,7 @@
 import * as mongoose from 'mongoose';
 import * as TelegramBot from "node-telegram-bot-api";
 
-type Message = TelegramBot.Message
+type Message = MessagesTel
 type Comand = TelegramBot.BotCommand & { flowId?: string }
 
 export const TelegramBotSchema = new mongoose.Schema({
