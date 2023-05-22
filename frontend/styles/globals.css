@@ -6,6 +6,7 @@
     --font_color: #1d2129;
     --link_color: #0a5b9a;
     --link_color_hover: #6d84b4;
+    --chat_color:#ffffff;
   }
 
 * {
@@ -36,6 +37,7 @@ body.dark-mode {
     --font_color: #fff;
     --link_color: #0091ff;
     --link_color_hover: #6898ff;
+    --chat_color:#2f71ff;
 }
 
 body::before {

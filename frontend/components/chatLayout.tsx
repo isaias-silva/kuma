@@ -24,8 +24,8 @@ export default function LayoutChat({ children, title }: { title: string, childre
 
             if (io) {
                 io.on("connect", () => {
-                  
-                    route.reload()   
+                route.reload()
+                     
                 })
                 
                 io.on("close",()=>{

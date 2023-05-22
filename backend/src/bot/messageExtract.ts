@@ -24,7 +24,11 @@ export default async function extract(socket: TelegramBot, msg: TelegramBot.Mess
 
         if (chat.type == 'group' || chat.type == 'channel') {
             let dataProfileGroup = (await socket.getUserProfilePhotos(msg.from.id))?.photos[0]
-            profileUserGroup = await socket.getFileLink(dataProfileGroup[0].file_id)
+            if (dataProfileGroup) {
+
+                profileUserGroup = await socket.getFileLink(dataProfileGroup[0].file_id)
+            }
+
         }
         const message = {
             type: msg.photo ? "image" : msg.video ? "video" : msg.audio || msg.voice ? "audio" : msg.document ? "doc" : msg.sticker ? "sticker" : "text",
@@ -37,7 +41,7 @@ export default async function extract(socket: TelegramBot, msg: TelegramBot.Mess
 
         }
         if (message.type != "text") {
-            const file = msg.video || msg.audio || msg.document || msg.photo[0]
+            const file = msg.video || msg.audio || msg.voice || msg.sticker|| msg.document || msg.photo[msg.photo.length - 1]
             const media = await socket.getFileLink(file.file_id)
             message.urlMedia = media
         }

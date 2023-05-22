@@ -126,23 +126,24 @@
     margin-bottom: 4px;
 }
 
-.chatBarr li {
+.chatBarr li a {
+
     position: relative;
     display: flex;
     box-sizing: border-box;
-
+    justify-content: left;
     align-items: center;
 
     border-radius: 10px;
     background-color: #00000033;
 }
 
-.chatBarr li img {
+.chatBarr li a img {
     margin-right: 10px;
     border-radius: 100%;
 }
 
-.chatBarr li span {
+.chatBarr li a span {
     display: block;
     text-align: left;
 }
@@ -171,6 +172,55 @@
     font-size: 14px;
     text-align: left;
 
+}
+
+.chatSession {
+   padding-top: 50px;
+   position: relative;
+}
+
+.chatSession .headerChat {
+    position: fixed;
+    width: 75%;
+    box-sizing: border-box;
+    padding-left: 10px;
+    margin: 0;
+    top: 0;
+    right:0;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    background-color: var(--component_color);
+}
+
+.msg {
+    max-width: 40%;
+    display: flex;
+    background-color: var(--chat_color);
+    margin-bottom: 10px;
+    box-sizing: border-box;
+    padding-bottom: 5px;
+    padding-top: 4px;
+    padding-left: 3px;
+    padding-right: 3px;
+    border-radius: 10px;
+
+}
+.msg audio{
+   width: 100%;
+}
+.videoContent, .imageContent, .stickerContent {
+    width: 100%;
+    overflow: hidden;
+
+
+
+}
+
+.videoContent video, .imageContent img, .stickerContent img {
+    width: 100%;
+    margin: auto;
+    border-radius: 10px;
 }
 
 .profile {
@@ -821,6 +871,7 @@ h1 .loadText {
     text-align: center;
     margin: auto;
 }
+
 .countMsgBtn {
     background-color: #ff0000;
     font-weight: bold;
