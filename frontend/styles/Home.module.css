@@ -167,6 +167,14 @@
 
 }
 
+.profileLink img {
+    transition: 0.4s linear;
+}
+
+.profileLink img:hover {
+    transform: scale(1.5);
+}
+
 .lastmessage {
     font-weight: normal;
     font-size: 14px;
@@ -175,27 +183,63 @@
 }
 
 .chatSession {
-   padding-top: 50px;
-   position: relative;
+    padding-top: 100px;
+    position: relative;
+    padding-bottom: 50px;
 }
 
-.chatSession .headerChat {
+.chatSession .headerChat, .chatSession .chatForm {
     position: fixed;
     width: 75%;
     box-sizing: border-box;
+   
+    display: flex;
+    align-items: center;
+    background-color: var(--component_color);
+    box-shadow: 4px 4px 8px #000;
+    
+    backdrop-filter: blur(9px);
+}
+
+.headerChat{
     padding-left: 10px;
     margin: 0;
     top: 0;
-    right:0;
-    display: flex;
-    align-items: center;
-    height: 40px;
-    background-color: var(--component_color);
+    right: 0;
+    height: 60px;
 }
-
+.headerChat img {
+    border-radius: 100%;
+    margin-right: 15px
+}
+.chatForm{
+    right: 0;
+    bottom: 0;
+  height: 50px;
+  justify-content: center;
+}
+.chatForm textarea{
+    resize:none;
+    width: 80%;
+}
+.chatForm button{
+    width: 45px;
+    height: 45px;
+    border-radius: 100%;
+    border: 1px solid var(--font_color);
+    color:var(--font_color);
+    background-color: var(--input_color);
+    transition: 0.4s linear;
+}
+.chatForm button:hover{
+    background-color: var(--link_color_hover);
+    cursor: pointer;
+}
 .msg {
     max-width: 40%;
     display: flex;
+    align-items: center;
+    justify-content: left;
     background-color: var(--chat_color);
     margin-bottom: 10px;
     box-sizing: border-box;
@@ -206,9 +250,15 @@
     border-radius: 10px;
 
 }
-.msg audio{
-   width: 100%;
+
+.msg h4 {
+    margin-right: 5px;
 }
+
+.msg audio {
+    width: 100%;
+}
+
 .videoContent, .imageContent, .stickerContent {
     width: 100%;
     overflow: hidden;
@@ -743,6 +793,16 @@ li .loadText, .botInfo li input {
     cursor: pointer;
     rotate: 45deg;
 
+
+}
+
+.control button svg {
+
+    transition: 0.5s linear;
+}
+
+.control button:hover svg {
+    color: red
 }
 
 .explanation {

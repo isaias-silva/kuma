@@ -10,6 +10,8 @@ import corrupted from '../public/corrupted.png'
 import { Socket } from "socket.io-client"
 import Image from "next/image"
 import Link from "next/link"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faPaperclip,faMicrophone } from "@fortawesome/free-solid-svg-icons"
 
 function createDivMessage(message: MessagesTel["messages"]) {
     const divMessages = message.map(value => {
@@ -17,6 +19,7 @@ function createDivMessage(message: MessagesTel["messages"]) {
             case "video":
                 return <div className={styles.msg}>
                     <div className={styles.videoContent}>
+                        {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
                         <video src={value.urlMedia} controls>
 
                         </video>
@@ -26,6 +29,7 @@ function createDivMessage(message: MessagesTel["messages"]) {
             case "image":
                 return <div className={styles.msg}>
                     <div className={styles.imageContent}>
+                        {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
 
                         <Image src={value.urlMedia || corrupted}
                             width={300}
@@ -38,18 +42,23 @@ function createDivMessage(message: MessagesTel["messages"]) {
                 </div>
             case "audio":
                 return <div className={styles.msg}>
+                    {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
+
                     <audio src={value.urlMedia} controls></audio>
 
                     <p>{value.text}</p>
                 </div>
             case "doc":
                 return <div className={styles.msg}>
+                    {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
+
                     {value.urlMedia ? <Link href={value.urlMedia} download>file</Link> : null}
                     <p>{value.text}</p>
                 </div>
             case "sticker":
                 return <div className={styles.msg}>
                     <div className={styles.stickerContent}>
+                        {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
 
                         <Image src={value.urlMedia || corrupted}
                             width={150}
@@ -59,6 +68,8 @@ function createDivMessage(message: MessagesTel["messages"]) {
                 </div>
             case "text":
                 return <div className={styles.msg}>
+                    {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
+
                     <p>{value.text}</p>
                 </div>
 
@@ -90,7 +101,10 @@ export default function ChatComponent({ io, messages }: { io?: Socket, messages?
 
     return <div className={styles.chatSession}>
         <div className={styles.headerChat}>
-
+            <Image src={youMessage?.profile || corrupted}
+                width={50}
+                height={50}
+                alt="profile-chat"></Image>
             <h2>{youMessage?.name}</h2>
         </div>
         {youMessage ?
@@ -98,5 +112,12 @@ export default function ChatComponent({ io, messages }: { io?: Socket, messages?
                 {createDivMessage(youMessage.messages)}
             </>
             : null}
+
+        <div className={styles.chatForm}>
+            <button><FontAwesomeIcon icon={faPaperclip} width={20} height={20}/></button>
+           <textarea ></textarea>
+            <button><FontAwesomeIcon icon={faMicrophone} width={20} height={20}/></button>
+         
+         </div>
     </div>
 }

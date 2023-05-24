@@ -90,7 +90,7 @@ export default function AsideMessages({ messages, botInfo }: { botInfo?: TelBot,
 
             <div className={styles.userinfo}>
                 <div className={styles.profile}>
-                    <Link href={'/user'}>
+                    <Link href={'/user'} className={styles.profileLink}>
                         <Image src={userInfo?.profile || load} alt="your profile" width={100} height={100} />
                     </Link>
                 </div>

@@ -6,30 +6,38 @@ export default async function extract(socket: TelegramBot, msg: TelegramBot.Mess
     try {
 
         const { text, chat, caption } = msg
-        let dataprofile
         let profile
 
         if (chat.type == 'private') {
-            dataprofile = (await socket.getUserProfilePhotos(chat.id))?.photos[0]
+
+            let dataprofile = (await socket.getUserProfilePhotos(chat.id))?.photos[0]
             profile = await socket.getFileLink(dataprofile[0].file_id)
         }
-        if (chat.type == 'group') {
+        if (chat.type == 'channel') {
+            const info = await socket.getChat(chat.id)
+            if (info.photo) {
+                profile = await socket.getFileLink(info.photo.small_file_id)
+            }
+        }
+        if (chat.type == 'group' || chat.type == "supergroup") {
             const info = await socket.getChat(chat.id)
             if (info.photo) {
                 profile = (await socket.getFileLink(info.photo.small_file_id || info.photo.big_file_id))
             }
         }
-        const isGroup = chat.type == 'group' || chat.type == 'channel'
+        const isGroup = chat.type == 'group' || chat.type == 'supergroup'
         let profileUserGroup
 
-        if (chat.type == 'group' || chat.type == 'channel') {
+        if (isGroup) {
             let dataProfileGroup = (await socket.getUserProfilePhotos(msg.from.id))?.photos[0]
             if (dataProfileGroup) {
+
 
                 profileUserGroup = await socket.getFileLink(dataProfileGroup[0].file_id)
             }
 
         }
+
         const message = {
             type: msg.photo ? "image" : msg.video ? "video" : msg.audio || msg.voice ? "audio" : msg.document ? "doc" : msg.sticker ? "sticker" : "text",
             text: text || caption,
@@ -41,7 +49,7 @@ export default async function extract(socket: TelegramBot, msg: TelegramBot.Mess
 
         }
         if (message.type != "text") {
-            const file = msg.video || msg.audio || msg.voice || msg.sticker|| msg.document || msg.photo[msg.photo.length - 1]
+            const file = msg.video || msg.audio || msg.voice || msg.sticker || msg.document || msg.photo[msg.photo.length - 1]
             const media = await socket.getFileLink(file.file_id)
             message.urlMedia = media
         }
@@ -61,6 +69,7 @@ export default async function extract(socket: TelegramBot, msg: TelegramBot.Mess
     catch (err) {
         console.log(err)
     } finally {
+        console.log(formatMessage)
         return formatMessage
     }
 }
