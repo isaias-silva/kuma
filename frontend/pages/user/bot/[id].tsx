@@ -166,14 +166,19 @@ export default function Bot() {
 
                 </li>
 
-                <li>
-                  <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button>
-                  <button onClick={() => {
-                    route.push(`chat/?apiKey=${bot?.apiKey}&id=${bot?._id}`)
-                  }}><FontAwesomeIcon icon={faMessage} width={15} /> chat
-                    {bot?.messages && bot.messages.length > 0 ?<span className={styles.countMsgBtn}>{bot.messages.length}</span>:''}
-                  </button>
-                </li>
+                {bot ?
+
+                  <li>
+                    <button onClick={deleteBot}><FontAwesomeIcon icon={faTrash} width={12} /> delete bot</button>
+                    <button onClick={() => {
+                      route.push(`chat/?apiKey=${bot?.apiKey}&id=${bot?._id}`)
+                    }}><FontAwesomeIcon icon={faMessage} width={15} /> chat
+                      {bot?.messages && bot.messages.length > 0 ? <span className={styles.countMsgBtn}>{bot.messages.length}</span> : ''}
+                    </button>
+                  </li>
+                  : null}
+
+
               </ul>
 
             </div>

@@ -11,7 +11,8 @@ import { Socket } from "socket.io-client"
 import Image from "next/image"
 import Link from "next/link"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faPaperclip,faMicrophone } from "@fortawesome/free-solid-svg-icons"
+import { faPaperclip, faMicrophone } from "@fortawesome/free-solid-svg-icons"
+import MessageBarr from "./MessageBarr"
 
 function createDivMessage(message: MessagesTel["messages"]) {
     const divMessages = message.map(value => {
@@ -32,8 +33,8 @@ function createDivMessage(message: MessagesTel["messages"]) {
                         {value.groupChatInfo ? <h4>{value.groupChatInfo.name}: </h4> : null}
 
                         <Image src={value.urlMedia || corrupted}
-                            width={300}
-                            height={300}
+                            width={Infinity}
+                            height={Infinity}
                             alt="image"></Image>
 
 
@@ -113,11 +114,6 @@ export default function ChatComponent({ io, messages }: { io?: Socket, messages?
             </>
             : null}
 
-        <div className={styles.chatForm}>
-            <button><FontAwesomeIcon icon={faPaperclip} width={20} height={20}/></button>
-           <textarea ></textarea>
-            <button><FontAwesomeIcon icon={faMicrophone} width={20} height={20}/></button>
-         
-         </div>
+        <MessageBarr io={io} />
     </div>
 }
