@@ -1,7 +1,7 @@
 import * as TelegramBot from "node-telegram-bot-api";
 import { Socket } from "socket.io";
 import extract from "./messageExtract";
-import { BotServices } from "src/controllers/bot/bot.services";
+import { BotServices } from "src/routes/bot/bot.services";
 
 export class Bot {
     socket: TelegramBot

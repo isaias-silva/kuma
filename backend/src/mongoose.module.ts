@@ -5,6 +5,6 @@ import { config } from 'dotenv';
 config()
 
 @Module({
-    imports: [MongooseModule.forRoot(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@data.djsnl.mongodb.net/?retryWrites=true&w=majority`)],
-  })
-  export class MongooseConfigModule {}
+  imports: [MongooseModule.forRoot(process.env.DB_HOST || 'mongodb://localhost:27017/db')],
+})
+export class MongooseConfigModule { }

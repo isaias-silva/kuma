@@ -8,7 +8,7 @@ export class AuthController {
     }
     @Post("/login")
     async login(@Body() body, @Res() res) {
-        const token = await this.service.validateUser(body.name, body.password)
-        return new ResponseOfRequest('login is sucess', 201).sendResponse(res, { token })
+      
+        return await this.service.login(body.name, body.password)
     }
 }

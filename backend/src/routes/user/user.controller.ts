@@ -38,20 +38,11 @@ export class UserController {
     }
     @Post('create')
 
-    async create(@Body() user: User, @Res() res) {
+    async create(@Body() user: CreateUserDto, @Res() res) {
 
-        const validatedUser = new CreateUserDto()
-        validatedUser.name = user.name
-        validatedUser.password = user.password
-        validatedUser.adm = false;
-        validatedUser.days_use = 15
-        validatedUser.active_service = true
-        const erros = validateSync(validatedUser)
-        if (erros.length > 0) {
-            return new ResponseOfRequest('error in create user', HttpStatus.BAD_REQUEST).sendResponse(res, erros.map(value => value.constraints))
-        }
-        const result = await this.service.create(validatedUser);
-        return new ResponseOfRequest('user created', HttpStatus.OK).sendResponse(res, result)
+    
+     return await this.service.create(user);
+       
     }
 
     @Put('update')

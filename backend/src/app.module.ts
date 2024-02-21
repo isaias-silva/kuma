@@ -1,15 +1,15 @@
 import { MiddlewareConsumer, Module, } from '@nestjs/common';
 
-import { UserModule } from './controllers/user/user.module';
+import { UserModule } from './routes/user/user.module';
 
 import { MongooseConfigModule } from './mongoose.module';
-import { AuthModule } from './controllers/auth/auth.module';
+import { AuthModule } from './routes/auth/auth.module';
 import { JwtMiddleware } from './middlewares/check.jwt';
 import { AdmMiddleware } from './middlewares/check.adm';
 import { MulterModule } from '@nestjs/platform-express';
-import { UploadModule } from './controllers/upload/upload.module';
-import { BotModule } from './controllers/bot/bot.module';
-import { WsModule } from './controllers/websocket/websocket.module';
+import { UploadModule } from './routes/upload/upload.module';
+import { BotModule } from './routes/bot/bot.module';
+import { WsModule } from './routes/websocket/websocket.module';
 
 
 @Module({
