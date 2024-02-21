@@ -57,7 +57,7 @@ body::after {
     content: " ";
     width: 100%;
     height: 100%;
-    background-image: url('../public/animate_background.gif');
+    background-image: url('https://wallpapercosmos.com/w/full/1/e/d/1143164-3840x2160-desktop-4k-robot-background-image.jpg');
     background-size: cover;
     filter: opacity(0.08);
     position: fixed;
@@ -80,7 +80,8 @@ a {
 }
 
 a:hover {
-    color: var(--link_color_hover)
+    color: var(--link_color_hover);
+    text-decoration: underline;
 }
 
 * input,textarea {

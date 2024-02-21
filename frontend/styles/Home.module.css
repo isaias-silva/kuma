@@ -338,11 +338,17 @@
 
 
 /*login*/
+.loginContent{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
 .login {
     background-color: var(--modal_color);
     width: 40%;
     min-height: 300px;
-    margin: auto;
+ 
     border-radius: 20px;
     display: flex;
     flex-direction: column;
@@ -350,8 +356,9 @@
     justify-content: center;
     padding: 4px;
     box-sizing: border-box;
-    margin-top: 50px;
-    box-shadow: 10px 10px #000;
+  
+    transition: linear 0.4s;
+    box-shadow: 2px 2px 4px #000;
 }
 
 .login div {
@@ -365,6 +372,7 @@
 
 .login label {
     margin-top: 10px;
+    margin-bottom: 4px;
     display: block;
     font-weight: bold;
     color: var(--main_color);
@@ -446,9 +454,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--input_color);
     border-radius: 10px;
     width: 200px;
+    background-color:var(--component_color);
+    margin-right: 10px;
+    padding: 2px;
 }
 
 .input_view input {
@@ -461,11 +471,13 @@
 }
 
 .input_view svg {
-    color: var(--font_color)
+   margin-left: 3px;
+    color: var(--font_color);
+  
 }
 
 .login button {
-    width: 40%;
+    width: 50%;
     height: 40px;
     margin-top: 20px;
     border-radius: 10px;
@@ -473,7 +485,12 @@
     color: var(--font_color);
     font-weight: bold;
     transition: 0.3s linear;
+    border: none;
 
+}
+
+.login input{
+    padding:0px 15px 0px 15px;
 }
 
 .login span, .editForm span, .botForm span, span.error {
@@ -570,7 +587,8 @@
 
 .login button:hover, .editForm button:hover, .botForm button:hover, .commandForm button:hover {
     cursor: pointer;
-    background-color: var(--component_color);
+    background-color:  var(--link_color);
+
 }
 
 .controlTheme, .btnLeft {

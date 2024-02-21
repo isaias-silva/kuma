@@ -13,22 +13,23 @@ import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 
 import Cookies from 'js-cookie'
 import login from '@/services/login';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content';
+
 import DefaultConfigModal from '@/utils/generateConfigModal';
 
-export default function LoginForm() {
-    
-    type LoginFormInputs = {
+export default function RegisterForm() {
+
+    type RegisterForm = {
+        name: string;
         email: string;
         password: string;
+        passwordRepite: string;
     };
 
     const router = useRouter()
 
-    const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>();
+    const { register, handleSubmit, formState: { errors },getValues } = useForm<RegisterForm>();
 
-    const onSubmit = async (data: LoginFormInputs) => {
+    const onSubmit = async (data: RegisterForm) => {
         const response: { status: number, data: { message: string, data: { token: string } } } = await login(data);
         if (response.status == 201) {
             Cookies.set('token', response.data.data.token)
@@ -36,7 +37,7 @@ export default function LoginForm() {
 
 
             DefaultConfigModal({
-                text: 'login is a success',
+                text: 'user created!',
                 icon: 'success',
                 title: 'wellcome'
             }).fire()
@@ -54,6 +55,17 @@ export default function LoginForm() {
 
         }
     };
+    const validatename = (value: string) => {
+        let error;
+        if (!value) {
+            error = "name is required";
+        }
+        else if (value.length < 3) {
+            error = "name is short! min: 3 digits"
+        }
+        return error || true;
+    };
+
     const validateemail = (value: string) => {
         let error;
         if (!value) {
@@ -74,15 +86,32 @@ export default function LoginForm() {
         }
         return error || true;
     };
+    const validatePasswordRepite = (value: string) => { 
+        let error;
+        if (!value) {
+            error = "password repite is required";
+        }
+        if (value!=getValues("password")){
+            error = "password repite and password is not equals.";
+
+        }
+        return error || true;
+    }
 
     const [visiblePassword, setVisiblePassword] = useState<Boolean>(false)
     return (
         <form onSubmit={handleSubmit(onSubmit)} className={styles.login}>
-          
+
             <Image src={perfil} alt={''} width={100} height={100}></Image>
             <div>
+                <label htmlFor="email">Name</label>
+                <input type="text" {...register("name", { validate: validatename })} />
+                {errors.name ? <span>{errors.name.message}</span> : null}
+            </div>
+
+            <div>
                 <label htmlFor="email">Email</label>
-                <input type="text" {...register("email", { validate: validateemail })} />
+                <input type="email" {...register("email", { validate: validateemail })} />
                 {errors.email ? <span>{errors.email.message}</span> : null}
             </div>
 
@@ -99,9 +128,18 @@ export default function LoginForm() {
                 {errors.password ? <span>{errors.password.message}</span> : null}
 
             </div>
+            <div>
+                <label htmlFor="#password-repite">Password repite</label>
+               
+                    <input type={visiblePassword ? 'text' : 'password'} {...register("passwordRepite", { validate: validatePasswordRepite })} />
 
-            <button type="submit">Login</button>
-            <Link href={'/register'}>Are you new here? click to assign!</Link>
+             
+                {errors.passwordRepite ? <span>{errors.passwordRepite.message}</span> : null}
+
+            </div>
+
+            <button type="submit">Register</button>
+            <Link href={'/login'}>you have account?</Link>
         </form>
     );
 };
