@@ -378,6 +378,17 @@
     color: var(--main_color);
 
 }
+.login input{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.login img{
+    width: 20%;
+    height: auto;
+    border-radius: 100%;
+    box-sizing: border-box;
+    border: 5px solid var(--main_color)
+}
 
 .editForm, .botForm, .commandForm {
     max-width: 700px;
@@ -459,9 +470,12 @@
     background-color:var(--component_color);
     margin-right: 10px;
     padding: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .input_view input {
+    margin:0;
     border: none;
     border-radius: 0px;
     width: 100%;
@@ -500,7 +514,7 @@
     color: #ff0000;
     background-color: #ec9696;
     width: 60%;
-
+animation: infinite error 0.5s;
     margin-top: 5px;
     padding: 2px;
     border-radius: 10px;
@@ -854,6 +868,19 @@ li .loadText, .botInfo li input {
     rotate: 360deg;
 }
 
+/*animations*/
+@keyframes error {
+    0%{
+    transform: rotate(0deg);
+    }
+    50%{
+        transform: rotate(5deg);
+    }
+    100%{
+        transform: rotate(0deg);
+    }
+ 
+}
 @keyframes loadText {
     0% {
         filter: opacity(1)

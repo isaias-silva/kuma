@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 
 import styles from '@/styles/Home.module.css'
 import Image from 'next/image';
-import perfil from '../public/login.png'
+import perfil from '../public/profile.jpeg'
 import Link from 'next/link';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -104,21 +104,21 @@ export default function RegisterForm() {
 
             <Image src={perfil} alt={''} width={100} height={100}></Image>
             <div>
-                <label htmlFor="email">Name</label>
-                <input type="text" {...register("name", { validate: validatename })} />
+           
+                <input type="text" placeholder='your name' {...register("name", { validate: validatename })} />
                 {errors.name ? <span>{errors.name.message}</span> : null}
             </div>
 
             <div>
-                <label htmlFor="email">Email</label>
-                <input type="email" {...register("email", { validate: validateemail })} />
+         
+                <input type="email" placeholder='your email' {...register("email", { validate: validateemail })} />
                 {errors.email ? <span>{errors.email.message}</span> : null}
             </div>
 
             <div>
-                <label htmlFor="#password">Password</label>
+           
                 <div className={styles.input_view}>
-                    <input type={visiblePassword ? 'text' : 'password'} {...register("password", { validate: validatePassword })} />
+                    <input placeholder='your password' type={visiblePassword ? 'text' : 'password'} {...register("password", { validate: validatePassword })} />
 
                     <FontAwesomeIcon className={styles.btn_activate} width={24}
                         icon={visiblePassword ? faEyeSlash : faEye}
@@ -129,9 +129,7 @@ export default function RegisterForm() {
 
             </div>
             <div>
-                <label htmlFor="#password-repite">Password repite</label>
-               
-                    <input type={visiblePassword ? 'text' : 'password'} {...register("passwordRepite", { validate: validatePasswordRepite })} />
+                   <input type='password' placeholder='repite your password' {...register("passwordRepite", { validate: validatePasswordRepite })} />
 
              
                 {errors.passwordRepite ? <span>{errors.passwordRepite.message}</span> : null}
