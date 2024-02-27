@@ -2,7 +2,6 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as jwt from 'jsonwebtoken'
-import { scheduleJob } from "node-schedule";
 import { Model } from 'mongoose';
 import { User } from './user.model';
 import { hash } from 'bcrypt'
