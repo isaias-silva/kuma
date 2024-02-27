@@ -15,7 +15,6 @@ export interface User {
   email: string,
   name: string,
   password: string,
-  confirmPassword?: string
   profile?: Buffer,
   adm: Boolean
   days_use?: number

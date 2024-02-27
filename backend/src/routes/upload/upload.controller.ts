@@ -1,9 +1,8 @@
-import { Body, Controller, HttpException, HttpStatus, Inject, Post, Put, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, HttpException, HttpStatus, Inject, Put, Req, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ResponseOfRequest } from 'src/utils/ResponseOfRequest';
 import { UserServices } from '../user/user.services';
 import { BotServices } from '../bot/bot.services';
-import generateFormData from 'src/utils/generateFormData';
 
 @Controller('upload')
 export class UploadController {

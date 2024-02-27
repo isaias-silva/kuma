@@ -12,7 +12,7 @@ export class AuthService {
 
             const user = await this.userServices.getUserByName(name)
 
-            if (!user || !user.password) {
+            if (!user) {
                 throw new HttpException('user not found', HttpStatus.NOT_FOUND)
             }
             if (await compare(password, user.password)) {

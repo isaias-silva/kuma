@@ -6,7 +6,7 @@ import { scheduleJob } from "node-schedule";
 import { Model } from 'mongoose';
 import { User } from './user.model';
 import { hash } from 'bcrypt'
-import { UpdateUserDto } from './update-user.dto';
+import { UpdateUserDto } from './update.user.dto';
 import * as fs from 'fs';
 
 
@@ -51,8 +51,6 @@ export class UserServices {
 
       const token = jwt.sign({ adm, name, _id, active_service, days_use }, process.env.SECRET)
 
-      this.startJob(result, result.id)
-
       return token
     } catch (err) {
 
@@ -86,7 +84,7 @@ export class UserServices {
 
       await this.userModel.deleteOne({ _id: id })
 
-      return
+      return{message:'user deleted'}
     } catch (err) {
 
       throw new HttpException(err.message, err.status || HttpStatus.INTERNAL_SERVER_ERROR);
@@ -140,32 +138,11 @@ export class UserServices {
       }
 
       await this.userModel.updateOne({ _id: user.id }, { days_use: 10, active_service: true })
-      this.startJob(user, user.id)
+    
     } catch (err) {
 
       throw err
     }
   }
-  async startJob(user: User, _id: string) {
-    if (user.adm || !user.active_service) {
-      return
-    }
-
-    const userModel = this.userModel
-
-    const job = scheduleJob("0 0 * * *", async function () {
-      const userUpdate = await userModel.findById(_id)
-      const { days_use } = userUpdate
-
-      const newDayUse = days_use > 0 ? days_use - 1 : 0
-
-      if (newDayUse == 0) {
-        await userModel.updateOne({ _id }, { days_use: newDayUse, active_service: false })
-        job.cancel()
-      } else {
-        await userModel.updateOne({ _id }, { days_use: newDayUse })
-
-      }
-    });
-  }
+  
 }
